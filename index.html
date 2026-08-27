@@ -3,824 +3,373 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Casa Tabor | Joyas con significado</title>
-
+  <meta name="description" content="Casa Tabor · joyas y accesorios con significado. Envíos en Chile.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-
   <style>
     :root {
-      --marfil: #f7f3ec;
-      --crema: #eee5d8;
-      --cafe: #65584d;
-      --cafe-oscuro: #40372f;
-      --dorado: #aa9275;
-      --blanco: #fffdf9;
+      --marfil:#f7f3ec; --crema:#eee5d8; --cafe:#65584d; --cafe-oscuro:#40372f;
+      --dorado:#aa9275; --blanco:#fffdf9; --linea:#e8e0d5;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--blanco);color:var(--cafe-oscuro);font-family:'Montserrat',sans-serif;font-weight:300}
+    a{color:inherit}
+    .announcement{background:var(--cafe-oscuro);color:#fff;text-align:center;padding:9px 15px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+    header{height:96px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;border-bottom:1px solid var(--linea);background:rgba(255,253,249,.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
+    .menu{display:flex;gap:28px;align-items:center}
+    .menu a{text-decoration:none;font-size:11px;letter-spacing:1.45px;text-transform:uppercase}
+    .brand{position:absolute;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap}
+    .brand-name,.footer-brand{font-family:'Cormorant Garamond',serif;font-size:38px;letter-spacing:8px;font-weight:500}
+    .brand-o{display:inline-flex;width:.88em;height:.88em;border:1.3px solid currentColor;border-radius:50%;align-items:center;justify-content:center;letter-spacing:0;vertical-align:.02em;margin:0 .04em}
+    .brand-cross{font-family:'Cormorant Garamond',serif;font-size:.57em;line-height:1;transform:translateY(-.01em)}
+    .brand-subtitle{font-size:8px;letter-spacing:4px;text-transform:uppercase;margin-top:-3px}
+    .icons{display:flex;gap:17px;align-items:center}
+    .icon-btn{background:none;border:0;color:var(--cafe-oscuro);cursor:pointer;padding:5px;display:grid;place-items:center}
+    .icon-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5}
+    .cart-button{position:relative}
+    #cartCount{position:absolute;top:-7px;right:-7px;background:var(--cafe-oscuro);color:#fff;border-radius:50%;font-size:9px;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
+    .hero{min-height:72vh;background:linear-gradient(rgba(48,39,31,.30),rgba(48,39,31,.30)),url('images/hero.jpeg') center 45%/cover no-repeat;display:flex;justify-content:center;align-items:center;text-align:center;padding:40px}
+    .hero-content{max-width:720px;color:#fff;text-shadow:0 1px 18px rgba(0,0,0,.12)}
+    .hero-small{text-transform:uppercase;letter-spacing:5px;font-size:11px;margin-bottom:18px}
+    .hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(54px,8vw,92px);font-weight:400;line-height:.92}
+    .hero p{font-family:'Cormorant Garamond',serif;font-size:23px;margin:24px 0 32px;font-style:italic}
+    .button{display:inline-block;border:1px solid #fff;color:#fff;padding:14px 31px;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-size:10px;transition:.25s}
+    .button:hover{background:#fff;color:var(--cafe-oscuro)}
+    .intro{padding:90px 20px;text-align:center;background:var(--marfil)}
+    .eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase}
+    .intro h2,.story h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(38px,5vw,58px);margin:18px auto}
+    .intro p{max-width:650px;margin:auto;line-height:1.95;font-size:13px;color:var(--cafe)}
+    .catalog{padding:90px 6% 110px}
+    .section-title{text-align:center;margin-bottom:36px}
+    .section-title h2{font-family:'Cormorant Garamond',serif;font-size:50px;font-weight:400;margin-top:8px}
+    .filters{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-bottom:45px}
+    .filter-btn{border:1px solid var(--linea);background:#fff;padding:10px 17px;text-transform:uppercase;letter-spacing:1.3px;font-size:9px;cursor:pointer;color:var(--cafe-oscuro)}
+    .filter-btn.active,.filter-btn:hover{background:var(--cafe-oscuro);color:#fff;border-color:var(--cafe-oscuro)}
+    .products{display:grid;grid-template-columns:repeat(3,1fr);gap:44px 25px}
+    .product{text-align:center;min-width:0}
+    .product-image{aspect-ratio:1/1.14;background:var(--crema);margin-bottom:20px;overflow:hidden;position:relative}
+    .product-image img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+    .product:hover .product-image img{transform:scale(1.025)}
+    .stock-badge{position:absolute;left:12px;bottom:12px;background:rgba(255,253,249,.9);padding:7px 9px;font-size:8px;letter-spacing:1px;text-transform:uppercase}
+    .product h3{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:500;line-height:1.1}
+    .category{font-size:8px;text-transform:uppercase;letter-spacing:1.7px;color:var(--dorado);margin:8px 0 4px}
+    .price{margin:7px 0 13px;font-size:12px;letter-spacing:1px}
+    .variant-row{margin:0 auto 12px;max-width:220px}
+    .variant-row label{display:block;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+    .variant-select{width:100%;border:1px solid var(--linea);background:#fff;padding:10px 11px;color:var(--cafe-oscuro);font-family:'Montserrat',sans-serif;font-size:10px}
+    .add{background:transparent;border:1px solid var(--cafe);padding:12px 20px;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1.5px;font-size:9px;cursor:pointer;transition:.2s}
+    .add:hover{background:var(--cafe-oscuro);color:#fff}
+    .add:disabled{opacity:.45;cursor:not-allowed}
+    .story{background:var(--crema);padding:100px 7%}
+    .story-grid{max-width:1120px;margin:auto;display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:start}
+    .story-copy p{font-size:13px;line-height:2;color:var(--cafe);margin-bottom:18px}
+    .story-quote{font-family:'Cormorant Garamond',serif;font-size:32px;line-height:1.15;font-style:italic;padding:32px;border-left:1px solid var(--dorado)}
+    .story-note{font-size:10px;line-height:1.8;letter-spacing:.3px;margin-top:18px}
+    footer{background:var(--cafe-oscuro);color:#eee7de;padding:68px 7% 28px}
+    .footer-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:55px;max-width:1180px;margin:auto}
+    .footer-brand{font-size:42px;margin-bottom:7px}
+    .footer-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:25px}
+    .footer-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:15px}
+    .footer-line{font-size:11px;line-height:2.1;color:#e4dbd0}
+    .footer-line a{text-decoration:none}
+    .footer-bottom{max-width:1180px;margin:48px auto 0;border-top:1px solid rgba(255,255,255,.12);padding-top:20px;font-size:9px;letter-spacing:.7px;text-align:center;color:#cfc3b7}
+    .overlay{visibility:hidden;opacity:0;position:fixed;inset:0;background:rgba(0,0,0,.3);transition:.3s;z-index:190}
+    .overlay.open{visibility:visible;opacity:1}
+    .cart{position:fixed;top:0;right:-450px;width:min(450px,94vw);height:100vh;background:var(--blanco);z-index:200;padding:34px;transition:.35s;overflow-y:auto}
+    .cart.open{right:0}
+    .cart-header{display:flex;justify-content:space-between;border-bottom:1px solid var(--linea);padding-bottom:20px}
+    .cart-header h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400}
+    .close{cursor:pointer;font-size:27px}
+    #cartItems{padding:14px 0}
+    .cart-empty{font-size:12px;color:var(--cafe);padding:28px 0}
+    .cart-item{padding:17px 0;border-bottom:1px solid var(--linea);font-size:11px}
+    .cart-item-top{display:flex;justify-content:space-between;gap:14px}
+    .cart-item-name{font-family:'Cormorant Garamond',serif;font-size:18px}
+    .cart-item-meta{font-size:9px;letter-spacing:.5px;margin-top:5px;color:var(--cafe)}
+    .cart-item-actions{margin-top:10px;display:flex;align-items:center;gap:8px}
+    .qty-btn{width:26px;height:26px;border:1px solid var(--linea);background:#fff;cursor:pointer}
+    .remove-btn{margin-left:auto;border:0;background:none;text-decoration:underline;font-size:9px;color:var(--cafe);cursor:pointer}
+    .cart-total{display:flex;justify-content:space-between;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:25px}
+    .checkout{width:100%;background:var(--cafe-oscuro);color:#fff;border:0;padding:17px;margin-top:22px;text-transform:uppercase;letter-spacing:2px;cursor:pointer}
+    .stock-note{font-size:9px;line-height:1.6;color:var(--cafe);margin-top:14px}
+    @media(max-width:900px){
+      .products{grid-template-columns:repeat(2,1fr)}
+      .story-grid{grid-template-columns:1fr;gap:30px}
+      .footer-grid{grid-template-columns:1fr 1fr}
     }
-
-    body {
-      background: var(--blanco);
-      color: var(--cafe-oscuro);
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 300;
+    @media(max-width:750px){
+      header{height:78px;padding:0 20px}
+      .menu{display:none}
+      .brand-name{font-size:28px;letter-spacing:6px}
+      .brand-subtitle{font-size:6px;letter-spacing:2px}
+      .hero{min-height:68vh;background-position:58% center}
+      .catalog{padding:70px 16px 90px}
+      .products{gap:34px 12px}
+      .product h3{font-size:21px}
+      .footer-grid{grid-template-columns:1fr;gap:30px}
+      .story{padding:80px 22px}
     }
-
-    /* BARRA SUPERIOR */
-
-    .announcement {
-      background: var(--cafe-oscuro);
-      color: white;
-      text-align: center;
-      padding: 9px 15px;
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    /* HEADER */
-
-    header {
-      height: 95px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 6%;
-      border-bottom: 1px solid #eee8df;
-      background: var(--blanco);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .menu {
-      display: flex;
-      gap: 28px;
-      align-items: center;
-    }
-
-    .menu a {
-      text-decoration: none;
-      color: var(--cafe-oscuro);
-      font-size: 12px;
-      letter-spacing: 1.3px;
-      text-transform: uppercase;
-    }
-
-    .brand {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-    }
-
-    .brand-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 38px;
-      letter-spacing: 8px;
-      font-weight: 500;
-    }
-
-    .brand-subtitle {
-      font-size: 8px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-top: -3px;
-    }
-
-    .icons {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      font-size: 19px;
-    }
-
-    .cart-button {
-      cursor: pointer;
-      position: relative;
-    }
-
-    #cartCount {
-      position: absolute;
-      top: -10px;
-      right: -12px;
-      background: var(--cafe-oscuro);
-      color: white;
-      border-radius: 50%;
-      font-size: 9px;
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* HERO */
-
-    .hero {
-      min-height: 72vh;
-      background:
-        linear-gradient(
-          rgba(75,65,55,.18),
-          rgba(75,65,55,.20)
-        ),
-        linear-gradient(
-          135deg,
-          #d8cabb,
-          #eee6dc 40%,
-          #c9b9a7
-        );
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px;
-    }
-
-    .hero-content {
-      max-width: 700px;
-      color: white;
-    }
-
-    .hero-small {
-      text-transform: uppercase;
-      letter-spacing: 5px;
-      font-size: 11px;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(50px, 8vw, 90px);
-      font-weight: 400;
-      line-height: .95;
-    }
-
-    .hero p {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 23px;
-      margin: 22px 0 32px;
-      font-style: italic;
-    }
-
-    .button {
-      display: inline-block;
-      border: 1px solid white;
-      color: white;
-      padding: 14px 31px;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 10px;
-      transition: .3s;
-    }
-
-    .button:hover {
-      background: white;
-      color: var(--cafe-oscuro);
-    }
-
-    /* INTRO */
-
-    .intro {
-      padding: 95px 20px;
-      text-align: center;
-      background: var(--marfil);
-    }
-
-    .intro span {
-      font-size: 10px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-
-    .intro h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 400;
-      font-size: clamp(38px, 5vw, 57px);
-      margin: 18px auto;
-    }
-
-    .intro p {
-      max-width: 590px;
-      margin: auto;
-      line-height: 1.9;
-      font-size: 13px;
-      color: var(--cafe);
-    }
-
-    /* PRODUCTOS */
-
-    .shop {
-      padding: 90px 6%;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 55px;
-    }
-
-    .section-title p {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-    }
-
-    .section-title h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 48px;
-      font-weight: 400;
-      margin-top: 8px;
-    }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 25px;
-    }
-
-    .product {
-      text-align: center;
-    }
-
-    .product-image {
-      aspect-ratio: 1 / 1.15;
-      background: linear-gradient(145deg,#d6c9b8,#f0e9df);
-      margin-bottom: 22px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .product-image span {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 27px;
-      color: rgba(70,60,50,.45);
-    }
-
-    .product h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      font-weight: 500;
-    }
-
-    .price {
-      margin: 8px 0 16px;
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
-
-    .add {
-      background: transparent;
-      border: 1px solid var(--cafe);
-      padding: 11px 22px;
-      font-family: Montserrat;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-size: 9px;
-      cursor: pointer;
-    }
-
-    .add:hover {
-      background: var(--cafe-oscuro);
-      color: white;
-    }
-
-    /* HISTORIA */
-
-    .meaning {
-      background: var(--crema);
-      text-align: center;
-      padding: 100px 20px;
-    }
-
-    .meaning h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 55px;
-      font-weight: 400;
-    }
-
-    .meaning p {
-      max-width: 600px;
-      margin: 20px auto;
-      font-size: 13px;
-      line-height: 1.9;
-    }
-
-    /* CARRITO */
-
-    .overlay {
-      visibility: hidden;
-      opacity: 0;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.3);
-      transition: .3s;
-      z-index: 190;
-    }
-
-    .overlay.open {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .cart {
-      position: fixed;
-      top: 0;
-      right: -430px;
-      width: min(430px, 92vw);
-      height: 100vh;
-      background: var(--blanco);
-      z-index: 200;
-      padding: 35px;
-      transition: .35s;
-      overflow-y: auto;
-    }
-
-    .cart.open {
-      right: 0;
-    }
-
-    .cart-header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #ddd4c8;
-      padding-bottom: 20px;
-    }
-
-    .cart-header h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 31px;
-      font-weight: 400;
-    }
-
-    .close {
-      cursor: pointer;
-      font-size: 25px;
-    }
-
-    #cartItems {
-      padding: 20px 0;
-    }
-
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 17px 0;
-      border-bottom: 1px solid #eee8df;
-      font-size: 12px;
-    }
-
-    .cart-total {
-      display: flex;
-      justify-content: space-between;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 23px;
-      margin-top: 25px;
-    }
-
-    .checkout {
-      width: 100%;
-      background: var(--cafe-oscuro);
-      color: white;
-      border: none;
-      padding: 17px;
-      margin-top: 22px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      cursor: pointer;
-    }
-
-    /* FOOTER */
-
-    footer {
-      background: var(--cafe-oscuro);
-      color: #eee7de;
-      padding: 70px 7%;
-      text-align: center;
-    }
-
-    .footer-brand {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 41px;
-      letter-spacing: 8px;
-    }
-
-    footer p {
-      margin-top: 13px;
-      font-size: 10px;
-      letter-spacing: 2px;
-    }
-
-    /* MOBILE */
-
-    @media(max-width: 750px) {
-
-      header {
-        height: 77px;
-      }
-
-      .menu {
-        display: none;
-      }
-
-      .brand-name {
-        font-size: 27px;
-        letter-spacing: 6px;
-      }
-
-      .brand-subtitle {
-        font-size: 6px;
-        letter-spacing: 2px;
-      }
-
-      .products {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .hero {
-        min-height: 70vh;
-      }
-
-      .shop {
-        padding: 70px 18px;
-      }
-
-    }
-
   </style>
 </head>
-
 <body>
-
-<div class="announcement">
-  Joyas con significado · Envíos a todo Chile
-</div>
+<div class="announcement">Joyas con significado · Envíos a todo Chile</div>
 
 <header>
-
   <nav class="menu">
-    <a href="#shop">Tienda</a>
+    <a href="#inicio">Tienda</a>
+    <a href="#catalogo">Catálogo</a>
     <a href="#historia">Nuestra historia</a>
   </nav>
 
-  <div class="brand">
-    <div class="brand-name">TABOR</div>
+  <div class="brand" aria-label="Tabor, joyas con significado">
+    <div class="brand-name">TAB<span class="brand-o"><span class="brand-cross">†</span></span>R</div>
     <div class="brand-subtitle">Joyas con significado</div>
   </div>
 
   <div class="icons">
-    <span>♡</span>
-
-    <span class="cart-button" onclick="toggleCart()">
-      🛍
+    <button class="icon-btn" aria-label="Favoritos">
+      <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+    </button>
+    <button class="icon-btn cart-button" onclick="toggleCart()" aria-label="Abrir carrito">
+      <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 13H7L6 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
       <span id="cartCount">0</span>
-    </span>
+    </button>
   </div>
-
 </header>
 
-<section class="hero">
-
+<section class="hero" id="inicio">
   <div class="hero-content">
-
-    <div class="hero-small">
-      Casa Tabor
-    </div>
-
-    <h1>
-      Herencia.<br>
-      Belleza. Fe.
-    </h1>
-
-    <p>
-      Joyas creadas para llevar contigo aquello en lo que crees.
-    </p>
-
-    <a href="#shop" class="button">
-      Descubrir colección
-    </a>
-
+    <div class="hero-small">Casa Tabor</div>
+    <h1>Herencia.<br>Belleza. Fe.</h1>
+    <p>Joyas creadas para llevar contigo aquello en lo que crees.</p>
+    <a href="#catalogo" class="button">Descubrir colección</a>
   </div>
-
 </section>
 
 <section class="intro">
-
-  <span>Nuestra esencia</span>
-
-  <h2>
-    Joyas que cuentan una historia
-  </h2>
-
-  <p>
-    Piezas inspiradas en símbolos que trascienden el tiempo.
-    Diseñadas para acompañarte, regalarse y convertirse
-    en pequeños tesoros con significado.
-  </p>
-
+  <div class="eyebrow">Nuestra esencia</div>
+  <h2>Joyas que cuentan una historia</h2>
+  <p>Casa Tabor reúne piezas con carácter, inspiración vintage y símbolos que nos recuerdan lo esencial. Joyas y accesorios pensados para acompañarte, regalarse y convertirse en pequeños tesoros con significado.</p>
 </section>
 
-<section class="shop" id="shop">
-
+<section class="catalog" id="catalogo">
   <div class="section-title">
-
-    <p>Casa Tabor</p>
-
-    <h2>
-      Favoritos
-    </h2>
-
+    <div class="eyebrow">Casa Tabor</div>
+    <h2>Catálogo</h2>
   </div>
-
-  <div class="products">
-
-    <article class="product">
-
-      <div class="product-image">
-        <span>Próximamente foto</span>
-      </div>
-
-      <h3>Anillo San Benito</h3>
-
-      <div class="price">
-        $24.990
-      </div>
-
-      <button
-        class="add"
-        onclick="addToCart('Anillo San Benito',24990)">
-        Agregar al carrito
-      </button>
-
-    </article>
-
-
-    <article class="product">
-
-      <div class="product-image">
-        <span>Próximamente foto</span>
-      </div>
-
-      <h3>Collar Sagrado Corazón</h3>
-
-      <div class="price">
-        $29.990
-      </div>
-
-      <button
-        class="add"
-        onclick="addToCart('Collar Sagrado Corazón',29990)">
-        Agregar al carrito
-      </button>
-
-    </article>
-
-
-    <article class="product">
-
-      <div class="product-image">
-        <span>Próximamente foto</span>
-      </div>
-
-      <h3>Aros Corazón</h3>
-
-      <div class="price">
-        $21.990
-      </div>
-
-      <button
-        class="add"
-        onclick="addToCart('Aros Corazón',21990)">
-        Agregar al carrito
-      </button>
-
-    </article>
-
-  </div>
-
+  <div class="filters" id="filters"></div>
+  <div class="products" id="products"></div>
 </section>
 
-<section class="meaning" id="historia">
-
-  <h2>
-    Más que una joya.
-  </h2>
-
-  <p>
-    Tabor nace de la unión entre belleza, tradición y significado.
-    Cada pieza busca convertirse en un recordatorio de aquello que
-    queremos llevar siempre cerca.
-  </p>
-
+<section class="story" id="historia">
+  <div class="story-grid">
+    <div>
+      <div class="eyebrow">Nuestra historia</div>
+      <h2>Más que una joya.</h2>
+      <div class="story-quote">“Belleza que se lleva. Símbolos que permanecen.”</div>
+    </div>
+    <div class="story-copy">
+      <p>Casa Tabor nace del deseo de encontrar piezas que no sean solamente bonitas, sino que también tengan algo que decir. Nos inspira la joyería con aire antiguo, los símbolos de fe, los corazones, medallas y detalles capaces de transformar un look y, al mismo tiempo, guardar un significado personal.</p>
+      <p>Seleccionamos cada pieza en pequeñas cantidades, privilegiando diseños con identidad. Por eso muchas de nuestras joyas tienen stock limitado: queremos que se sientan especiales, como ese hallazgo que encuentras una vez y decides guardar contigo.</p>
+      <p>El nombre Tabor evoca un lugar de luz y transformación. Esa idea está en el corazón de la marca: objetos cotidianos que pueden convertirse en recordatorios de aquello que amamos, creemos o queremos mantener cerca.</p>
+      <p class="story-note">Desde Las Condes, Chile · Selección en pequeñas cantidades · Envíos a todo Chile.</p>
+    </div>
+  </div>
 </section>
 
 <footer>
-
-  <div class="footer-brand">
-    TABOR
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">TAB<span class="brand-o"><span class="brand-cross">†</span></span>R</div>
+      <div class="footer-tag">Joyas con significado</div>
+      <div class="footer-line">Las Condes, Chile</div>
+    </div>
+    <div>
+      <div class="footer-title">Contacto</div>
+      <div class="footer-line"><a href="tel:+56962261085">+56 9 6226 1085</a></div>
+      <div class="footer-line"><a href="https://www.instagram.com/casa.tabor/" target="_blank" rel="noopener">@casa.tabor</a></div>
+    </div>
+    <div>
+      <div class="footer-title">Información</div>
+      <div class="footer-line">Envíos a todo Chile</div>
+      <div class="footer-line">Stock limitado por diseño</div>
+      <div class="footer-line">Pago seguro próximamente con Mercado Pago</div>
+    </div>
   </div>
-
-  <p>
-    JOYAS CON SIGNIFICADO
-  </p>
-
-  <p>
-    @CASA.TABOR
-  </p>
-
+  <div class="footer-bottom">© 2026 Casa Tabor · Todos los derechos reservados.</div>
 </footer>
 
-
-<div
-  class="overlay"
-  id="overlay"
-  onclick="toggleCart()">
-</div>
-
-
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
 <aside class="cart" id="cart">
-
   <div class="cart-header">
-
-    <h2>
-      Tu carrito
-    </h2>
-
-    <span
-      class="close"
-      onclick="toggleCart()">
-      ×
-    </span>
-
+    <h2>Tu carrito</h2>
+    <span class="close" onclick="toggleCart()">×</span>
   </div>
-
-  <div id="cartItems">
-    Tu carrito está vacío.
-  </div>
-
-  <div class="cart-total">
-
-    <span>Total</span>
-
-    <span id="cartTotal">
-      $0
-    </span>
-
-  </div>
-
-  <button
-    class="checkout"
-    onclick="checkout()">
-    Continuar al pago
-  </button>
-
+  <div id="cartItems"></div>
+  <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
+  <button class="checkout" onclick="checkout()">Continuar al pago</button>
+  <p class="stock-note">El stock se controla dentro de esta visita. Cuando conectemos Mercado Pago y una base de datos, quedará sincronizado automáticamente entre todas las compras.</p>
 </aside>
 
-
 <script>
+const products = [{"id": "pinza-eliza", "name": "Pinza Eliza", "price": 8000, "category": "Accesorios", "material": "Gamuza con broderie", "variants": {"Talla única": 2}}, {"id": "aros-cruz-sagrado-corazon", "name": "Aros Cruz y Sagrado Corazón", "price": 8500, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "pendientes-candados-corazon", "name": "Pendientes Candados de Corazón", "price": 6500, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "aros-reina-victoria", "name": "Aros Reina Victoria", "price": 10000, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "cadena-sagrado-corazon-brillos", "name": "Cadena Sagrado Corazón y Brillos", "price": 12000, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "collar-acero-corazon-plata", "name": "Collar de Acero con Corazón de Plata", "price": 12990, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "panuelo-beige-sagrado-corazon", "name": "Pañuelo Beige con Sagrado Corazón", "price": 12500, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "pulsera-san-benito", "name": "Pulsera San Benito", "price": 3500, "category": "Pulseras", "material": "", "variants": {"Ajustable": 3}}, {"id": "pulsera-proteccion-virgen-maria", "name": "Pulsera de Protección Virgen María", "price": 5000, "category": "Pulseras", "material": "", "variants": {"Ajustable": 3}}, {"id": "anillo-vintage-burdel", "name": "Anillo Vintage Burdel", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1, "8": 1}}, {"id": "anillo-san-benito-bicolor", "name": "Anillo San Benito Bicolor", "price": 12000, "category": "Anillos", "material": "", "variants": {"7": 1, "8": 1}}, {"id": "anillo-mater", "name": "Anillo Mater", "price": 5500, "category": "Anillos", "material": "", "variants": {"8": 1}}, {"id": "anillo-rombo-rojo", "name": "Anillo Rombo Rojo", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-san-benito-dorado", "name": "Anillo San Benito Dorado", "price": 12000, "category": "Anillos", "material": "", "variants": {"9": 1}}, {"id": "conjunto-diamante", "name": "Conjunto Diamante", "price": 6500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-brillante-corazon", "name": "Anillo Brillante de Corazón", "price": 7000, "category": "Anillos", "material": "", "variants": {"8": 1}}, {"id": "anillo-ovalado-sagrado-corazon", "name": "Anillo Ovalado con Sagrado Corazón", "price": 4500, "category": "Anillos", "material": "", "variants": {"Ajustable": 1}}, {"id": "anillo-exvoto", "name": "Anillo Exvoto", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "collar-san-benito", "name": "Collar de San Benito", "price": 15000, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "anillo-quintillizo-corazon", "name": "Anillo Quintillizo de Corazón", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-corazon-ajustable", "name": "Anillo de Corazón Ajustable", "price": 5500, "category": "Anillos", "material": "", "variants": {"7 / ajustable": 1}}];
+let cart = JSON.parse(localStorage.getItem('casaTaborCart') || '[]');
+let activeCategory = 'Todos';
 
-let cart = [];
+function money(value) {
+  return '$' + value.toLocaleString('es-CL');
+}
 
-function addToCart(name, price){
+function totalStock(product) {
+  return Object.values(product.variants).reduce((a,b)=>a+b,0);
+}
 
-  const existing =
-    cart.find(item => item.name === name);
+function reservedQty(productId, variant) {
+  const item = cart.find(i => i.id === productId && i.variant === variant);
+  return item ? item.quantity : 0;
+}
 
-  if(existing){
+function availableQty(product, variant) {
+  return product.variants[variant] - reservedQty(product.id, variant);
+}
 
-    existing.quantity++;
+function renderFilters() {
+  const cats = ['Todos', ...new Set(products.map(p=>p.category))];
+  document.getElementById('filters').innerHTML = cats.map(cat =>
+    `<button class="filter-btn ${cat===activeCategory?'active':''}" onclick="setCategory('${cat}')">${cat}</button>`
+  ).join('');
+}
 
-  } else {
+function setCategory(category) {
+  activeCategory = category;
+  renderFilters();
+  renderProducts();
+}
 
-    cart.push({
-      name,
-      price,
-      quantity:1
-    });
+function renderProducts() {
+  const list = activeCategory === 'Todos' ? products : products.filter(p=>p.category===activeCategory);
+  document.getElementById('products').innerHTML = list.map(p => {
+    const variantEntries = Object.entries(p.variants);
+    const allSoldOut = variantEntries.every(([v,qty]) => availableQty(p,v) <= 0);
+    const options = variantEntries.map(([variant, stock]) => {
+      const available = availableQty(p, variant);
+      return `<option value="${variant}" ${available<=0?'disabled':''}>${variant} · ${available>0 ? available+' disponible'+(available>1?'s':'') : 'agotado'}</option>`;
+    }).join('');
+    return `
+      <article class="product">
+        <div class="product-image">
+          <img src="images/${p.id}.jpeg" alt="${p.name}" loading="lazy">
+          <div class="stock-badge">${totalStock(p)} en stock</div>
+        </div>
+        <div class="category">${p.category}</div>
+        <h3>${p.name}</h3>
+        <div class="price">${money(p.price)}</div>
+        ${p.material ? `<div style="font-size:10px;color:var(--cafe);margin:-4px 0 12px">${p.material}</div>` : ''}
+        <div class="variant-row">
+          <label for="variant-${p.id}">${variantEntries.length>1 ? 'Elige talla' : 'Opción'}</label>
+          <select class="variant-select" id="variant-${p.id}" ${allSoldOut?'disabled':''}>${options}</select>
+        </div>
+        <button class="add" onclick="addToCart('${p.id}')" ${allSoldOut?'disabled':''}>${allSoldOut?'Agotado':'Agregar al carrito'}</button>
+      </article>
+    `;
+  }).join('');
+}
 
+function addToCart(productId) {
+  const product = products.find(p=>p.id===productId);
+  const select = document.getElementById(`variant-${productId}`);
+  if (!product || !select || !select.value) return;
+  const variant = select.value;
+  if (availableQty(product, variant) <= 0) {
+    alert('Esa opción ya no tiene stock disponible.');
+    renderProducts();
+    return;
   }
+  const existing = cart.find(i => i.id===productId && i.variant===variant);
+  if (existing) existing.quantity++;
+  else cart.push({id:productId,name:product.name,price:product.price,variant,quantity:1});
+  saveCart();
+  renderProducts();
+  openCart();
+}
 
+function changeQty(index, delta) {
+  const item = cart[index];
+  const product = products.find(p=>p.id===item.id);
+  if (!product) return;
+  if (delta > 0 && item.quantity >= product.variants[item.variant]) {
+    alert('No hay más unidades disponibles de esta opción.');
+    return;
+  }
+  item.quantity += delta;
+  if (item.quantity <= 0) cart.splice(index,1);
+  saveCart();
+  renderProducts();
+}
+
+function removeItem(index) {
+  cart.splice(index,1);
+  saveCart();
+  renderProducts();
+}
+
+function saveCart() {
+  localStorage.setItem('casaTaborCart', JSON.stringify(cart));
   renderCart();
-
-  document
-    .getElementById("cart")
-    .classList.add("open");
-
-  document
-    .getElementById("overlay")
-    .classList.add("open");
-
 }
 
-function renderCart(){
-
-  const container =
-    document.getElementById("cartItems");
-
-  const count =
-    cart.reduce(
-      (sum,item) => sum + item.quantity,
-      0
-    );
-
-  document.getElementById("cartCount")
-    .innerText = count;
-
-  if(cart.length === 0){
-
-    container.innerHTML =
-      "Tu carrito está vacío.";
-
-    document.getElementById("cartTotal")
-      .innerText = "$0";
-
+function renderCart() {
+  const container = document.getElementById('cartItems');
+  const count = cart.reduce((sum,item)=>sum+item.quantity,0);
+  document.getElementById('cartCount').innerText = count;
+  if (!cart.length) {
+    container.innerHTML = '<div class="cart-empty">Tu carrito está vacío.</div>';
+    document.getElementById('cartTotal').innerText = '$0';
     return;
-
   }
-
-  container.innerHTML =
-    cart.map(item => `
-
-      <div class="cart-item">
-
+  container.innerHTML = cart.map((item,index)=>`
+    <div class="cart-item">
+      <div class="cart-item-top">
         <div>
-          ${item.name}
-          <br>
-          <small>
-            Cantidad: ${item.quantity}
-          </small>
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-meta">Talla / opción: ${item.variant}</div>
         </div>
-
-        <div>
-          $${(
-            item.price *
-            item.quantity
-          ).toLocaleString("es-CL")}
-        </div>
-
+        <div>${money(item.price*item.quantity)}</div>
       </div>
-
-    `).join("");
-
-  const total =
-    cart.reduce(
-      (sum,item) =>
-        sum +
-        item.price *
-        item.quantity,
-      0
-    );
-
-  document.getElementById("cartTotal")
-    .innerText =
-      "$" +
-      total.toLocaleString("es-CL");
-
+      <div class="cart-item-actions">
+        <button class="qty-btn" onclick="changeQty(${index},-1)">−</button>
+        <span>${item.quantity}</span>
+        <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+        <button class="remove-btn" onclick="removeItem(${index})">Eliminar</button>
+      </div>
+    </div>
+  `).join('');
+  const total = cart.reduce((sum,item)=>sum+item.price*item.quantity,0);
+  document.getElementById('cartTotal').innerText = money(total);
 }
 
-
-function toggleCart(){
-
-  document
-    .getElementById("cart")
-    .classList.toggle("open");
-
-  document
-    .getElementById("overlay")
-    .classList.toggle("open");
-
+function openCart() {
+  document.getElementById('cart').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
 }
-
-
-function checkout(){
-
-  if(cart.length === 0){
-
-    alert(
-      "Tu carrito está vacío 🤍"
-    );
-
+function toggleCart() {
+  document.getElementById('cart').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function checkout() {
+  if (!cart.length) {
+    alert('Tu carrito está vacío 🤍');
     return;
-
   }
-
-  alert(
-    "Aquí conectaremos Mercado Pago cuando activemos tus credenciales."
-  );
-
+  alert('El catálogo y el carrito ya están listos. El siguiente paso será conectar Mercado Pago para procesar este pedido.');
 }
 
+renderFilters();
+renderProducts();
+renderCart();
 </script>
-
 </body>
 </html>
