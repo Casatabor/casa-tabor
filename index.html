@@ -23,8 +23,6 @@
     .menu a{text-decoration:none;font-size:11px;letter-spacing:1.45px;text-transform:uppercase}
     .brand{position:absolute;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap}
     .brand-name,.footer-brand{font-family:'Cormorant Garamond',serif;font-size:38px;letter-spacing:8px;font-weight:500}
-    .brand-o{display:inline-flex;width:.88em;height:.88em;border:1.3px solid currentColor;border-radius:50%;align-items:center;justify-content:center;letter-spacing:0;vertical-align:.02em;margin:0 .04em}
-    .brand-cross{font-family:'Cormorant Garamond',serif;font-size:.57em;line-height:1;transform:translateY(-.01em)}
     .brand-subtitle{font-size:8px;letter-spacing:4px;text-transform:uppercase;margin-top:-3px}
     .icons{display:flex;gap:17px;align-items:center}
     .icon-btn{background:none;border:0;color:var(--cafe-oscuro);cursor:pointer;padding:5px;display:grid;place-items:center}
@@ -102,7 +100,38 @@
     }
     @media(max-width:750px){
       header{height:78px;padding:0 20px}
-      .menu{display:none}
+      header{
+        height:auto;
+        min-height:78px;
+        padding:14px 18px 12px;
+        display:grid;
+        grid-template-columns:1fr auto;
+        grid-template-areas:
+          "brand icons"
+          "menu menu";
+        row-gap:10px;
+      }
+      .brand{
+        position:static;
+        transform:none;
+        grid-area:brand;
+        text-align:left;
+      }
+      .icons{grid-area:icons;justify-self:end}
+      .menu{
+        grid-area:menu;
+        display:flex;
+        width:100%;
+        gap:0;
+        justify-content:space-between;
+        border-top:1px solid var(--linea);
+        padding-top:10px;
+      }
+      .menu a{
+        font-size:9px;
+        letter-spacing:1.1px;
+        white-space:nowrap;
+      }
       .brand-name{font-size:28px;letter-spacing:6px}
       .brand-subtitle{font-size:6px;letter-spacing:2px}
       .hero{min-height:68vh;background-position:58% center}
@@ -125,7 +154,7 @@
   </nav>
 
   <div class="brand" aria-label="Tabor, joyas con significado">
-    <div class="brand-name">TAB<span class="brand-o"><span class="brand-cross">†</span></span>R</div>
+    <div class="brand-name">TABOR</div>
     <div class="brand-subtitle">Joyas con significado</div>
   </div>
 
@@ -183,7 +212,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-brand">TAB<span class="brand-o"><span class="brand-cross">†</span></span>R</div>
+      <div class="footer-brand">TABOR</div>
       <div class="footer-tag">Joyas con significado</div>
       <div class="footer-line">Las Condes, Chile</div>
     </div>
