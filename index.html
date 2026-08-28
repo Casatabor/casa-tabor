@@ -985,7 +985,7 @@
   <button class="checkout" id="continueCheckoutBtn" onclick="checkout()">Continuar al pago</button>
 
   <div class="checkout-form" id="checkoutForm">
-    <h3>Datos de despacho</h3>
+    <h3>Datos de entrega</h3>
 
     <div class="checkout-field">
       <label for="checkoutName">Nombre y apellido</label>
@@ -1002,6 +1002,15 @@
       <input id="checkoutPhone" type="tel" autocomplete="tel" placeholder="+56 9..." required>
     </div>
 
+    <div class="checkout-field">
+      <label for="deliveryMethod">Forma de entrega</label>
+      <select id="deliveryMethod" onchange="updateDeliveryMethod()" required>
+        <option value="shipping">Envío a domicilio</option>
+        <option value="pickup">Retiro en Las Condes — GRATIS</option>
+      </select>
+    </div>
+
+    <div id="shippingFields">
     <div class="checkout-field">
       <label for="checkoutAddress">Dirección</label>
       <input id="checkoutAddress" type="text" autocomplete="street-address" placeholder="Calle y número" required>
@@ -1039,6 +1048,7 @@
         <option value="Magallanes">Magallanes</option>
       </select>
     </div>
+    </div>
 
     <div class="shipping-summary">
       <div class="shipping-summary-row"><span>Productos</span><span id="checkoutSubtotal">$0</span></div>
@@ -1051,7 +1061,7 @@
   </div>
 
   <p class="stock-note">
-    Envíos a todo Chile. El costo de despacho se calcula antes de pagar.
+    Envíos a todo Chile o retiro gratuito en Las Condes. El costo de despacho se calcula antes de pagar.
   </p>
 </aside>
 
@@ -1233,7 +1243,8 @@ function cartSubtotal() {
   return cart.reduce((sum,item)=>sum + item.price * item.quantity, 0);
 }
 
-function shippingCost(region) {
+function shippingCost(region, deliveryMethod = 'shipping') {
+  if (deliveryMethod === 'pickup') return 0;
   if (!region) return 0;
   if (region === 'Metropolitana') return 3990;
 
@@ -1256,7 +1267,7 @@ function checkout() {
 
   document.getElementById('checkoutForm').classList.add('open');
   document.getElementById('continueCheckoutBtn').style.display = 'none';
-  updateShippingSummary();
+  updateDeliveryMethod();
 }
 
 function volverAlCarrito() {
@@ -1264,14 +1275,43 @@ function volverAlCarrito() {
   document.getElementById('continueCheckoutBtn').style.display = 'block';
 }
 
+function updateDeliveryMethod() {
+  const method = document.getElementById('deliveryMethod')?.value || 'shipping';
+  const shippingFields = document.getElementById('shippingFields');
+  const address = document.getElementById('checkoutAddress');
+  const commune = document.getElementById('checkoutCommune');
+  const region = document.getElementById('checkoutRegion');
+
+  if (method === 'pickup') {
+    shippingFields.style.display = 'none';
+    address.required = false;
+    commune.required = false;
+    region.required = false;
+  } else {
+    shippingFields.style.display = 'block';
+    address.required = true;
+    commune.required = true;
+    region.required = true;
+  }
+
+  updateShippingSummary();
+}
+
 function updateShippingSummary() {
   const subtotal = cartSubtotal();
+  const method = document.getElementById('deliveryMethod')?.value || 'shipping';
   const region = document.getElementById('checkoutRegion')?.value || '';
-  const shipping = shippingCost(region);
+  const shipping = shippingCost(region, method);
 
   document.getElementById('checkoutSubtotal').innerText = money(subtotal);
-  document.getElementById('checkoutShipping').innerText = region ? money(shipping) : 'Selecciona región';
-  document.getElementById('checkoutFinalTotal').innerText = region ? money(subtotal + shipping) : money(subtotal);
+
+  if (method === 'pickup') {
+    document.getElementById('checkoutShipping').innerText = 'Retiro en Las Condes · GRATIS';
+    document.getElementById('checkoutFinalTotal').innerText = money(subtotal);
+  } else {
+    document.getElementById('checkoutShipping').innerText = region ? money(shipping) : 'Selecciona región';
+    document.getElementById('checkoutFinalTotal').innerText = region ? money(subtotal + shipping) : money(subtotal);
+  }
 }
 
 async function pagarConFlow() {
@@ -1283,22 +1323,30 @@ async function pagarConFlow() {
   const nombre = document.getElementById('checkoutName').value.trim();
   const email = document.getElementById('checkoutEmail').value.trim();
   const telefono = document.getElementById('checkoutPhone').value.trim();
-  const direccion = document.getElementById('checkoutAddress').value.trim();
-  const depto = document.getElementById('checkoutDept').value.trim();
-  const comuna = document.getElementById('checkoutCommune').value.trim();
-  const region = document.getElementById('checkoutRegion').value;
+  const deliveryMethod = document.getElementById('deliveryMethod').value;
+  const isPickup = deliveryMethod === 'pickup';
 
-  if (!nombre || !email || !telefono || !direccion || !comuna || !region) {
+  const direccion = isPickup ? 'Retiro en Las Condes' : document.getElementById('checkoutAddress').value.trim();
+  const depto = isPickup ? '' : document.getElementById('checkoutDept').value.trim();
+  const comuna = isPickup ? 'Las Condes' : document.getElementById('checkoutCommune').value.trim();
+  const region = isPickup ? 'Metropolitana' : document.getElementById('checkoutRegion').value;
+
+  if (!nombre || !email || !telefono) {
+    alert('Completa tus datos de contacto antes de continuar 🤍');
+    return;
+  }
+
+  if (!isPickup && (!direccion || !comuna || !region)) {
     alert('Completa todos los datos de despacho antes de continuar 🤍');
     return;
   }
 
   const subtotal = cartSubtotal();
-  const despacho = shippingCost(region);
+  const despacho = shippingCost(region, deliveryMethod);
   const total = subtotal + despacho;
 
   localStorage.setItem('casaTaborLastOrder', JSON.stringify({
-    nombre, email, telefono, direccion, depto, comuna, region,
+    nombre, email, telefono, deliveryMethod, direccion, depto, comuna, region,
     carrito: cart, subtotal, despacho, total
   }));
 
@@ -1315,13 +1363,15 @@ async function pagarConFlow() {
         email,
         subject: 'Compra Casa Tabor',
         region,
+        deliveryMethod,
         customer: {
           nombre,
           telefono,
           direccion,
           depto,
           comuna,
-          region
+          region,
+          deliveryMethod
         },
         items: cart.map(item => ({
           id: item.id,
