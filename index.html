@@ -1069,9 +1069,70 @@
 const products = [{"id": "pinza-eliza", "name": "Pinza Eliza", "price": 8000, "category": "Accesorios", "material": "Gamuza con broderie", "variants": {"Talla única": 2}}, {"id": "aros-cruz-sagrado-corazon", "name": "Aros Cruz y Sagrado Corazón", "price": 8500, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "pendientes-candados-corazon", "name": "Pendientes Candados de Corazón", "price": 6500, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "aros-reina-victoria", "name": "Aros Reina Victoria", "price": 10000, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "cadena-sagrado-corazon-brillos", "name": "Cadena Sagrado Corazón y Brillos", "price": 12000, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "collar-acero-corazon-plata", "name": "Collar de Acero con Corazón de Plata", "price": 12990, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "panuelo-beige-sagrado-corazon", "name": "Pañuelo Beige con Sagrado Corazón", "price": 12500, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "pulsera-san-benito", "name": "Pulsera San Benito", "price": 3500, "category": "Pulseras", "material": "", "variants": {"Ajustable": 3}}, {"id": "pulsera-proteccion-virgen-maria", "name": "Pulsera de Protección Virgen María", "price": 5000, "category": "Pulseras", "material": "", "variants": {"Ajustable": 3}}, {"id": "anillo-vintage-burdel", "name": "Anillo Vintage Burdel", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1, "8": 1}}, {"id": "anillo-san-benito-bicolor", "name": "Anillo San Benito Bicolor", "price": 12000, "category": "Anillos", "material": "", "variants": {"7": 1, "8": 1}}, {"id": "anillo-mater", "name": "Anillo Mater", "price": 5500, "category": "Anillos", "material": "", "variants": {"8": 1}}, {"id": "anillo-rombo-rojo", "name": "Anillo Rombo Rojo", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-san-benito-dorado", "name": "Anillo San Benito Dorado", "price": 12000, "category": "Anillos", "material": "", "variants": {"9": 1}}, {"id": "conjunto-diamante", "name": "Conjunto Diamante", "price": 6500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-brillante-corazon", "name": "Anillo Brillante de Corazón", "price": 7000, "category": "Anillos", "material": "", "variants": {"8": 1}}, {"id": "anillo-ovalado-sagrado-corazon", "name": "Anillo Ovalado con Sagrado Corazón", "price": 4500, "category": "Anillos", "material": "", "variants": {"Ajustable": 1}}, {"id": "anillo-exvoto", "name": "Anillo Exvoto", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "collar-san-benito", "name": "Collar de San Benito", "price": 15000, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "anillo-quintillizo-corazon", "name": "Anillo Quintillizo de Corazón", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-corazon-ajustable", "name": "Anillo de Corazón Ajustable", "price": 5500, "category": "Anillos", "material": "", "variants": {"7 / ajustable": 1}}];
 let cart = JSON.parse(localStorage.getItem('casaTaborCart') || '[]');
 let activeCategory = 'Todos';
+let stockLoaded = false;
 
 function money(value) {
   return '$' + value.toLocaleString('es-CL');
+}
+
+async function loadLiveStock() {
+  try {
+    const response = await fetch('/api/stock', { cache: 'no-store' });
+    if (!response.ok) throw new Error('No se pudo cargar el stock');
+
+    const rows = await response.json();
+    const inventory = {};
+
+    rows.forEach(row => {
+      if (!inventory[row.product_id]) inventory[row.product_id] = {};
+      inventory[row.product_id][row.variant] = Number(row.stock) || 0;
+    });
+
+    products.forEach(product => {
+      const liveVariants = inventory[product.id] || {};
+      Object.keys(product.variants).forEach(variant => {
+        product.variants[variant] = Object.prototype.hasOwnProperty.call(liveVariants, variant)
+          ? liveVariants[variant]
+          : 0;
+      });
+    });
+
+    stockLoaded = true;
+    reconcileCartWithStock();
+    renderProducts();
+    renderCart();
+  } catch (error) {
+    console.error('Error cargando stock real:', error);
+    stockLoaded = false;
+    renderProducts();
+  }
+}
+
+function reconcileCartWithStock() {
+  let changed = false;
+
+  cart = cart.filter(item => {
+    const product = products.find(p => p.id === item.id);
+    if (!product || !Object.prototype.hasOwnProperty.call(product.variants, item.variant)) {
+      changed = true;
+      return false;
+    }
+
+    const maxStock = Number(product.variants[item.variant]) || 0;
+    if (maxStock <= 0) {
+      changed = true;
+      return false;
+    }
+
+    if (item.quantity > maxStock) {
+      item.quantity = maxStock;
+      changed = true;
+    }
+
+    return true;
+  });
+
+  if (changed) localStorage.setItem('casaTaborCart', JSON.stringify(cart));
 }
 
 function totalStock(product) {
@@ -1105,18 +1166,18 @@ function renderProducts() {
 
   document.getElementById('products').innerHTML = list.map(p => {
     const variantEntries = Object.entries(p.variants);
-    const allSoldOut = variantEntries.every(([v,qty]) => availableQty(p,v) <= 0);
+    const allSoldOut = stockLoaded && variantEntries.every(([v,qty]) => availableQty(p,v) <= 0);
 
     const options = variantEntries.map(([variant, stock]) => {
-      const available = availableQty(p, variant);
-      return `<option value="${variant}" ${available<=0?'disabled':''}>${variant} · ${available>0 ? available+' disponible'+(available>1?'s':'') : 'agotado'}</option>`;
+      const available = stockLoaded ? availableQty(p, variant) : 0;
+      return `<option value="${variant}" ${(!stockLoaded || available<=0)?'disabled':''}>${variant} · ${stockLoaded ? (available>0 ? available+' disponible'+(available>1?'s':'') : 'agotado') : 'consultando stock...'}</option>`;
     }).join('');
 
     return `
       <article class="product">
         <div class="product-image">
           <img src="images/${p.id}.jpeg" alt="${p.name}" loading="lazy">
-          <div class="stock-badge">${totalStock(p)} en stock</div>
+          <div class="stock-badge">${stockLoaded ? (totalStock(p)>0 ? totalStock(p)+' en stock' : 'Agotado') : 'Consultando stock...'}</div>
         </div>
 
         <div class="category">${p.category}</div>
@@ -1127,13 +1188,13 @@ function renderProducts() {
 
         <div class="variant-row">
           <label for="variant-${p.id}">${variantEntries.length>1 ? 'Elige talla' : 'Opción'}</label>
-          <select class="variant-select" id="variant-${p.id}" ${allSoldOut?'disabled':''}>
+          <select class="variant-select" id="variant-${p.id}" ${(!stockLoaded || allSoldOut)?'disabled':''}>
             ${options}
           </select>
         </div>
 
-        <button class="add" onclick="addToCart('${p.id}')" ${allSoldOut?'disabled':''}>
-          ${allSoldOut?'Agotado':'Agregar al carrito'}
+        <button class="add" onclick="addToCart('${p.id}')" ${(!stockLoaded || allSoldOut)?'disabled':''}>
+          ${!stockLoaded?'Consultando stock...':(allSoldOut?'Agotado':'Agregar al carrito')}
         </button>
       </article>
     `;
@@ -1141,6 +1202,11 @@ function renderProducts() {
 }
 
 function addToCart(productId) {
+  if (!stockLoaded) {
+    alert('Estamos consultando el stock disponible. Intenta nuevamente en un momento 🤍');
+    return;
+  }
+
   const product = products.find(p=>p.id===productId);
   const select = document.getElementById(`variant-${productId}`);
 
@@ -1259,7 +1325,14 @@ function shippingCost(region, deliveryMethod = 'shipping') {
   return extreme.includes(region) ? 5990 : 4990;
 }
 
-function checkout() {
+async function checkout() {
+  await loadLiveStock();
+
+  if (!stockLoaded) {
+    alert('No pudimos verificar el stock en este momento. Intenta nuevamente 🤍');
+    return;
+  }
+
   if (!cart.length) {
     alert('Tu carrito está vacío 🤍');
     return;
@@ -1315,6 +1388,13 @@ function updateShippingSummary() {
 }
 
 async function pagarConFlow() {
+  await loadLiveStock();
+
+  if (!stockLoaded) {
+    alert('No pudimos verificar el stock en este momento. Intenta nuevamente 🤍');
+    return;
+  }
+
   if (!cart.length) {
     alert('Tu carrito está vacío 🤍');
     return;
@@ -1424,6 +1504,7 @@ handlePaymentReturn();
 renderFilters();
 renderProducts();
 renderCart();
+loadLiveStock();
 </script>
 
 </body>
