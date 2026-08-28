@@ -73,7 +73,6 @@ const PRODUCTS = {
   },
 };
 
-
 const VALID_REGIONS = new Set([
   "Arica y Parinacota",
   "Tarapacá",
@@ -93,8 +92,11 @@ const VALID_REGIONS = new Set([
   "Magallanes"
 ]);
 
+function shippingCost(region, deliveryMethod) {
+  if (deliveryMethod === "pickup") {
+    return 0;
+  }
 
-function shippingCost(region) {
   if (region === "Metropolitana") {
     return 3990;
   }
@@ -110,13 +112,11 @@ function shippingCost(region) {
   return extreme.has(region) ? 5990 : 4990;
 }
 
-
 function clean(value, max = 180) {
   return String(value || "")
     .trim()
     .slice(0, max);
 }
-
 
 module.exports = async function handler(req, res) {
 
@@ -126,17 +126,16 @@ module.exports = async function handler(req, res) {
     });
   }
 
-
   try {
 
     const {
       email,
       subject,
       region,
+      deliveryMethod,
       customer,
       items
     } = req.body || {};
-
 
     if (
       !email ||
@@ -149,42 +148,61 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    const isPickup = deliveryMethod === "pickup";
 
-    if (
-      !VALID_REGIONS.has(region) ||
-      customer.region !== region
-    ) {
-      return res.status(400).json({
-        error: "Región de despacho inválida"
-      });
+    if (!isPickup) {
+      if (
+        !VALID_REGIONS.has(region) ||
+        customer.region !== region
+      ) {
+        return res.status(400).json({
+          error: "Región de despacho inválida"
+        });
+      }
     }
-
 
     const nombre = clean(customer.nombre, 120);
     const telefono = clean(customer.telefono, 40);
-    const direccion = clean(customer.direccion, 180);
-    const depto = clean(customer.depto, 80);
-    const comuna = clean(customer.comuna, 100);
-    const payerEmail = clean(email, 160);
+    const direccion = isPickup
+      ? "Retiro en Las Condes"
+      : clean(customer.direccion, 180);
 
+    const depto = isPickup
+      ? ""
+      : clean(customer.depto, 80);
+
+    const comuna = isPickup
+      ? "Las Condes"
+      : clean(customer.comuna, 100);
+
+    const customerRegion = isPickup
+      ? "Metropolitana"
+      : clean(customer.region, 100);
+
+    const payerEmail = clean(email, 160);
 
     if (
       !nombre ||
       !telefono ||
-      !direccion ||
-      !comuna ||
       !payerEmail
+    ) {
+      return res.status(400).json({
+        error: "Faltan datos de contacto"
+      });
+    }
+
+    if (
+      !isPickup &&
+      (!direccion || !comuna || !customerRegion)
     ) {
       return res.status(400).json({
         error: "Faltan datos de despacho"
       });
     }
 
-
     let subtotal = 0;
 
     const normalizedItems = [];
-
 
     for (const rawItem of items) {
 
@@ -193,7 +211,6 @@ module.exports = async function handler(req, res) {
       const quantity = Number(rawItem?.quantity);
 
       const product = PRODUCTS[id];
-
 
       if (
         !product ||
@@ -205,9 +222,7 @@ module.exports = async function handler(req, res) {
         });
       }
 
-
       const stock = product.variants[variant];
-
 
       if (!stock || quantity > stock) {
         return res.status(400).json({
@@ -215,9 +230,7 @@ module.exports = async function handler(req, res) {
         });
       }
 
-
       subtotal += product.price * quantity;
-
 
       normalizedItems.push({
         id,
@@ -226,15 +239,19 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    const finalRegion = isPickup
+      ? "Metropolitana"
+      : region;
 
-    const despacho = shippingCost(region);
+    const despacho = shippingCost(
+      finalRegion,
+      deliveryMethod
+    );
 
     const total = subtotal + despacho;
 
-
     const apiKey = process.env.FLOW_API_KEY;
     const secretKey = process.env.FLOW_SECRET_KEY;
-
 
     if (!apiKey || !secretKey) {
       return res.status(500).json({
@@ -242,9 +259,7 @@ module.exports = async function handler(req, res) {
       });
     }
 
-
     const commerceOrder = `TABOR-${Date.now()}`;
-
 
     const optional = JSON.stringify({
       n: nombre,
@@ -252,11 +267,11 @@ module.exports = async function handler(req, res) {
       d: direccion,
       x: depto,
       c: comuna,
-      r: region,
+      r: finalRegion,
       s: despacho,
+      e: isPickup ? "Retiro en Las Condes" : "Envío a domicilio",
       i: normalizedItems
     });
-
 
     const params = {
 
@@ -284,22 +299,18 @@ module.exports = async function handler(req, res) {
       optional
     };
 
-
     const keys = Object.keys(params).sort();
 
     let toSign = "";
-
 
     for (const key of keys) {
       toSign += key + params[key];
     }
 
-
     const signature = crypto
       .createHmac("sha256", secretKey)
       .update(toSign)
       .digest("hex");
-
 
     const response = await fetch(
       "https://www.flow.cl/api/payment/create",
@@ -318,9 +329,7 @@ module.exports = async function handler(req, res) {
       }
     );
 
-
     const data = await response.json();
-
 
     if (!response.ok) {
 
@@ -328,7 +337,6 @@ module.exports = async function handler(req, res) {
         "Flow error:",
         data
       );
-
 
       return res.status(response.status).json({
 
@@ -338,7 +346,6 @@ module.exports = async function handler(req, res) {
         details: data
       });
     }
-
 
     return res.status(200).json({
 
@@ -354,9 +361,11 @@ module.exports = async function handler(req, res) {
 
       despacho,
 
-      total
-    });
+      total,
 
+      deliveryMethod:
+        isPickup ? "pickup" : "shipping"
+    });
 
   } catch (error) {
 
@@ -364,7 +373,6 @@ module.exports = async function handler(req, res) {
       "Error creando pago:",
       error
     );
-
 
     return res.status(500).json({
       error:
