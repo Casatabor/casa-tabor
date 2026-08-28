@@ -1259,9 +1259,22 @@ async function pagarConFlow() {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        amount: total,
         email,
-        subject: 'Compra Casa Tabor'
+        subject: 'Compra Casa Tabor',
+        region,
+        customer: {
+          nombre,
+          telefono,
+          direccion,
+          depto,
+          comuna,
+          region
+        },
+        items: cart.map(item => ({
+          id: item.id,
+          variant: item.variant,
+          quantity: item.quantity
+        }))
       })
     });
 
@@ -1270,6 +1283,12 @@ async function pagarConFlow() {
     if (!response.ok || !data.paymentUrl) {
       throw new Error(data?.error || 'No se pudo crear el pago');
     }
+
+    const pedidoLocal = JSON.parse(localStorage.getItem('casaTaborLastOrder') || '{}');
+    pedidoLocal.commerceOrder = data.commerceOrder || '';
+    pedidoLocal.flowOrder = data.flowOrder || '';
+    pedidoLocal.totalServidor = data.total || pedidoLocal.total;
+    localStorage.setItem('casaTaborLastOrder', JSON.stringify(pedidoLocal));
 
     window.location.href = data.paymentUrl;
   } catch (error) {
