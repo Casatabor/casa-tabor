@@ -4,165 +4,804 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Casa Tabor | Joyas con significado</title>
-  <meta name="description" content="Casa Tabor · joyas y accesorios con significado. Envíos en Chile.">
+  <meta name="description" content="Casa Tabor · joyas y accesorios con significado. Envíos a todo Chile.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --marfil:#f7f3ec; --crema:#eee5d8; --cafe:#65584d; --cafe-oscuro:#40372f;
-      --dorado:#aa9275; --blanco:#fffdf9; --linea:#e8e0d5;
+      --marfil:#fbf8f2;
+      --crema:#f1e9dc;
+      --crema2:#e6d8c8;
+      --cafe:#65584d;
+      --cafe-oscuro:#40372f;
+      --dorado:#b6925d;
+      --blanco:#fffdf9;
+      --linea:#e7ddd0;
     }
+
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{background:var(--blanco);color:var(--cafe-oscuro);font-family:'Montserrat',sans-serif;font-weight:300}
-    a{color:inherit}
-    .announcement{background:var(--cafe-oscuro);color:#fff;text-align:center;padding:9px 15px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
-    header{height:96px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;border-bottom:1px solid var(--linea);background:rgba(255,253,249,.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
-    .menu{display:flex;gap:28px;align-items:center}
-    .menu a{text-decoration:none;font-size:11px;letter-spacing:1.45px;text-transform:uppercase}
-    .brand{position:absolute;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap}
-    .brand-name,.footer-brand{font-family:'Cormorant Garamond',serif;font-size:38px;letter-spacing:8px;font-weight:500}
-    .brand-subtitle{font-size:8px;letter-spacing:4px;text-transform:uppercase;margin-top:-3px}
-    .icons{display:flex;gap:17px;align-items:center}
-    .icon-btn{background:none;border:0;color:var(--cafe-oscuro);cursor:pointer;padding:5px;display:grid;place-items:center}
-    .icon-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5}
-    .cart-button{position:relative}
-    #cartCount{position:absolute;top:-7px;right:-7px;background:var(--cafe-oscuro);color:#fff;border-radius:50%;font-size:9px;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
-    .hero{min-height:72vh;background:linear-gradient(rgba(48,39,31,.30),rgba(48,39,31,.30)),url('images/hero.jpeg') center 45%/cover no-repeat;display:flex;justify-content:center;align-items:center;text-align:center;padding:40px}
-    .hero-content{max-width:720px;color:#fff;text-shadow:0 1px 18px rgba(0,0,0,.12)}
-    .hero-small{text-transform:uppercase;letter-spacing:5px;font-size:11px;margin-bottom:18px}
-    .hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(54px,8vw,92px);font-weight:400;line-height:.92}
-    .hero p{font-family:'Cormorant Garamond',serif;font-size:23px;margin:24px 0 32px;font-style:italic}
-    .button{display:inline-block;border:1px solid #fff;color:#fff;padding:14px 31px;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-size:10px;transition:.25s}
-    .button:hover{background:#fff;color:var(--cafe-oscuro)}
-    .intro{padding:90px 20px;text-align:center;background:var(--marfil)}
-    .eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase}
-    .intro h2,.story h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(38px,5vw,58px);margin:18px auto}
-    .intro p{max-width:650px;margin:auto;line-height:1.95;font-size:13px;color:var(--cafe)}
-    .catalog{padding:90px 6% 110px}
-    .section-title{text-align:center;margin-bottom:36px}
-    .section-title h2{font-family:'Cormorant Garamond',serif;font-size:50px;font-weight:400;margin-top:8px}
-    .filters{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-bottom:45px}
-    .filter-btn{border:1px solid var(--linea);background:#fff;padding:10px 17px;text-transform:uppercase;letter-spacing:1.3px;font-size:9px;cursor:pointer;color:var(--cafe-oscuro)}
-    .filter-btn.active,.filter-btn:hover{background:var(--cafe-oscuro);color:#fff;border-color:var(--cafe-oscuro)}
-    .products{display:grid;grid-template-columns:repeat(3,1fr);gap:44px 25px}
-    .product{text-align:center;min-width:0}
-    .product-image{aspect-ratio:1/1.14;background:var(--crema);margin-bottom:20px;overflow:hidden;position:relative}
-    .product-image img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+    a{color:inherit;text-decoration:none}
+    button,select{font:inherit}
+
+    .announcement{
+      background:var(--cafe-oscuro);
+      color:#fff;
+      text-align:center;
+      padding:9px 15px;
+      font-size:10px;
+      letter-spacing:1.8px;
+      text-transform:uppercase;
+    }
+
+    header{
+      min-height:150px;
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      grid-template-rows:auto auto;
+      grid-template-areas:
+        ". brand ."
+        "navleft . navright";
+      align-items:center;
+      padding:16px 6% 12px;
+      background:rgba(255,253,249,.97);
+      border-bottom:1px solid var(--linea);
+      position:sticky;
+      top:0;
+      z-index:100;
+      backdrop-filter:blur(10px);
+      row-gap:12px;
+    }
+
+    .nav-left,.nav-right{
+      display:flex;
+      align-items:center;
+      gap:32px;
+    }
+
+    .nav-left{
+      grid-area:navleft;
+      justify-self:start;
+    }
+
+    .nav-right{
+      grid-area:navright;
+      justify-self:end;
+    }
+
+    .nav-link{
+      font-family:'Cormorant Garamond',serif;
+      font-size:18px;
+      letter-spacing:.5px;
+      position:relative;
+    }
+
+    .nav-link::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-5px;
+      width:0;
+      height:1px;
+      background:var(--dorado);
+      transition:.25s ease;
+    }
+
+    .nav-link:hover::after{width:100%}
+
+    .brand{
+      grid-area:brand;
+      text-align:center;
+      justify-self:center;
+      min-width:220px;
+    }
+
+    .brand-symbol{
+      font-family:'Cormorant Garamond',serif;
+      color:var(--dorado);
+      font-size:34px;
+      line-height:.8;
+      margin-bottom:4px;
+    }
+
+    .brand-name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:43px;
+      letter-spacing:8px;
+      font-weight:500;
+      line-height:.9;
+    }
+
+    .brand-subtitle{
+      margin-top:8px;
+      font-size:8px;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      color:var(--dorado);
+    }
+
+    .icon-btn{
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      border:0;
+      background:transparent;
+      cursor:pointer;
+      color:var(--cafe-oscuro);
+      position:relative;
+    }
+
+    .icon-btn svg{
+      width:23px;
+      height:23px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.45;
+    }
+
+    #cartCount{
+      position:absolute;
+      top:-1px;
+      right:-1px;
+      background:var(--cafe-oscuro);
+      color:#fff;
+      border-radius:50%;
+      width:17px;
+      height:17px;
+      font-size:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .hero{
+      min-height:68vh;
+      background:
+        linear-gradient(90deg,rgba(255,253,249,.92) 0%,rgba(255,253,249,.76) 26%,rgba(255,253,249,.12) 56%,rgba(255,253,249,0) 100%),
+        url('images/hero.jpeg') center 42%/cover no-repeat;
+      display:flex;
+      align-items:center;
+      padding:70px 8%;
+    }
+
+    .hero-content{
+      width:min(470px,100%);
+    }
+
+    .hero h1{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(54px,6vw,82px);
+      line-height:.93;
+      font-weight:400;
+      letter-spacing:.2px;
+    }
+
+    .hero-mark{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin:26px 0 22px;
+      color:var(--dorado);
+    }
+
+    .hero-mark::before,.hero-mark::after{
+      content:"";
+      height:1px;
+      width:90px;
+      background:var(--dorado);
+    }
+
+    .hero-mark span{
+      font-family:'Cormorant Garamond',serif;
+      font-size:22px;
+    }
+
+    .hero p{
+      font-family:'Cormorant Garamond',serif;
+      font-size:27px;
+      line-height:1.1;
+      margin-bottom:30px;
+      max-width:390px;
+    }
+
+    .button{
+      display:inline-block;
+      border:1px solid var(--dorado);
+      padding:14px 27px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:18px;
+      background:rgba(255,253,249,.78);
+      transition:.2s ease;
+    }
+
+    .button:hover{
+      background:var(--cafe-oscuro);
+      border-color:var(--cafe-oscuro);
+      color:#fff;
+    }
+
+    .collection-teaser{
+      padding:42px 6% 55px;
+      background:var(--marfil);
+    }
+
+    .section-heading{
+      text-align:center;
+      margin-bottom:30px;
+    }
+
+    .section-heading h2{
+      font-family:'Cormorant Garamond',serif;
+      font-size:42px;
+      font-weight:400;
+    }
+
+    .section-heading .mini-mark{
+      color:var(--dorado);
+      margin-top:6px;
+      font-size:18px;
+    }
+
+    .category-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:1px;
+      background:var(--linea);
+      border:1px solid var(--linea);
+      max-width:1220px;
+      margin:auto;
+    }
+
+    .category-card{
+      background:#fff;
+      cursor:pointer;
+      overflow:hidden;
+    }
+
+    .category-card img{
+      width:100%;
+      aspect-ratio:1/1;
+      object-fit:cover;
+      display:block;
+      transition:transform .4s ease;
+    }
+
+    .category-card:hover img{transform:scale(1.03)}
+
+    .category-card div{
+      font-family:'Cormorant Garamond',serif;
+      font-size:21px;
+      text-align:center;
+      padding:15px 8px 18px;
+    }
+
+    .catalog{
+      padding:95px 6% 110px;
+      background:#fff;
+    }
+
+    .eyebrow{
+      text-align:center;
+      font-size:9px;
+      letter-spacing:3.5px;
+      text-transform:uppercase;
+      color:var(--dorado);
+      margin-bottom:8px;
+    }
+
+    .catalog h2,.story h2,.contact h2{
+      font-family:'Cormorant Garamond',serif;
+      font-size:50px;
+      font-weight:400;
+      text-align:center;
+    }
+
+    .filters{
+      display:flex;
+      justify-content:center;
+      gap:9px;
+      flex-wrap:wrap;
+      margin:34px 0 45px;
+    }
+
+    .filter-btn{
+      border:1px solid var(--linea);
+      background:#fff;
+      padding:10px 17px;
+      text-transform:uppercase;
+      letter-spacing:1.3px;
+      font-size:9px;
+      cursor:pointer;
+      color:var(--cafe-oscuro);
+    }
+
+    .filter-btn.active,.filter-btn:hover{
+      background:var(--cafe-oscuro);
+      color:#fff;
+      border-color:var(--cafe-oscuro);
+    }
+
+    .products{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:46px 26px;
+    }
+
+    .product{text-align:center}
+
+    .product-image{
+      aspect-ratio:1/1.12;
+      background:var(--crema);
+      margin-bottom:18px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .product-image img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:transform .45s ease;
+    }
+
     .product:hover .product-image img{transform:scale(1.025)}
-    .stock-badge{position:absolute;left:12px;bottom:12px;background:rgba(255,253,249,.9);padding:7px 9px;font-size:8px;letter-spacing:1px;text-transform:uppercase}
-    .product h3{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:500;line-height:1.1}
-    .category{font-size:8px;text-transform:uppercase;letter-spacing:1.7px;color:var(--dorado);margin:8px 0 4px}
-    .price{margin:7px 0 13px;font-size:12px;letter-spacing:1px}
-    .variant-row{margin:0 auto 12px;max-width:220px}
-    .variant-row label{display:block;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
-    .variant-select{width:100%;border:1px solid var(--linea);background:#fff;padding:10px 11px;color:var(--cafe-oscuro);font-family:'Montserrat',sans-serif;font-size:10px}
-    .add{background:transparent;border:1px solid var(--cafe);padding:12px 20px;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1.5px;font-size:9px;cursor:pointer;transition:.2s}
-    .add:hover{background:var(--cafe-oscuro);color:#fff}
+
+    .stock-badge{
+      position:absolute;
+      left:12px;
+      bottom:12px;
+      background:rgba(255,253,249,.92);
+      padding:7px 9px;
+      font-size:8px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+
+    .product .category{
+      font-size:8px;
+      letter-spacing:1.7px;
+      text-transform:uppercase;
+      color:var(--dorado);
+      margin-bottom:6px;
+    }
+
+    .product h3{
+      font-family:'Cormorant Garamond',serif;
+      font-size:24px;
+      font-weight:500;
+      line-height:1.08;
+    }
+
+    .price{
+      font-size:12px;
+      letter-spacing:.8px;
+      margin:8px 0 13px;
+    }
+
+    .variant-row{
+      max-width:220px;
+      margin:0 auto 11px;
+    }
+
+    .variant-row label{
+      display:block;
+      font-size:8px;
+      text-transform:uppercase;
+      letter-spacing:1.3px;
+      margin-bottom:5px;
+    }
+
+    .variant-select{
+      width:100%;
+      padding:9px 10px;
+      border:1px solid var(--linea);
+      background:#fff;
+      color:var(--cafe-oscuro);
+      font-size:10px;
+    }
+
+    .add{
+      border:1px solid var(--cafe);
+      background:#fff;
+      padding:11px 20px;
+      text-transform:uppercase;
+      letter-spacing:1.4px;
+      font-size:9px;
+      cursor:pointer;
+    }
+
+    .add:hover{
+      background:var(--cafe-oscuro);
+      color:#fff;
+    }
+
     .add:disabled{opacity:.45;cursor:not-allowed}
-    .story{background:var(--crema);padding:100px 7%}
-    .story-grid{max-width:1120px;margin:auto;display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:start}
-    .story-copy p{font-size:13px;line-height:2;color:var(--cafe);margin-bottom:18px}
-    .story-quote{font-family:'Cormorant Garamond',serif;font-size:32px;line-height:1.15;font-style:italic;padding:32px;border-left:1px solid var(--dorado)}
-    .story-note{font-size:10px;line-height:1.8;letter-spacing:.3px;margin-top:18px}
-    footer{background:var(--cafe-oscuro);color:#eee7de;padding:68px 7% 28px}
-    .footer-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:55px;max-width:1180px;margin:auto}
-    .footer-brand{font-size:42px;margin-bottom:7px}
-    .footer-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:25px}
-    .footer-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:15px}
-    .footer-line{font-size:11px;line-height:2.1;color:#e4dbd0}
-    .footer-line a{text-decoration:none}
-    .footer-bottom{max-width:1180px;margin:48px auto 0;border-top:1px solid rgba(255,255,255,.12);padding-top:20px;font-size:9px;letter-spacing:.7px;text-align:center;color:#cfc3b7}
-    .overlay{visibility:hidden;opacity:0;position:fixed;inset:0;background:rgba(0,0,0,.3);transition:.3s;z-index:190}
+
+    .story{
+      background:var(--crema);
+      padding:95px 7%;
+    }
+
+    .story-inner{
+      max-width:1000px;
+      margin:auto;
+      text-align:center;
+    }
+
+    .story p{
+      max-width:760px;
+      margin:22px auto 0;
+      font-size:13px;
+      line-height:2;
+      color:var(--cafe);
+    }
+
+    .contact{
+      padding:90px 7%;
+      background:var(--marfil);
+    }
+
+    .contact-grid{
+      max-width:1000px;
+      margin:35px auto 0;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .contact-card{
+      border:1px solid var(--linea);
+      background:#fff;
+      padding:28px 24px;
+      text-align:center;
+    }
+
+    .contact-card .label{
+      font-size:8px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:var(--dorado);
+      margin-bottom:10px;
+    }
+
+    .contact-card .value{
+      font-family:'Cormorant Garamond',serif;
+      font-size:22px;
+    }
+
+    footer{
+      background:var(--cafe-oscuro);
+      color:#eee7de;
+      padding:58px 7% 25px;
+    }
+
+    .footer-grid{
+      max-width:1180px;
+      margin:auto;
+      display:grid;
+      grid-template-columns:1.2fr 1fr 1fr;
+      gap:45px;
+    }
+
+    .footer-brand{
+      font-family:'Cormorant Garamond',serif;
+      font-size:42px;
+      letter-spacing:8px;
+    }
+
+    .footer-tag{
+      margin-top:6px;
+      font-size:9px;
+      letter-spacing:3px;
+      text-transform:uppercase;
+    }
+
+    .footer-title{
+      font-size:9px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    .footer-line{
+      font-size:11px;
+      line-height:2;
+      color:#e4dbd0;
+    }
+
+    .footer-bottom{
+      max-width:1180px;
+      margin:42px auto 0;
+      border-top:1px solid rgba(255,255,255,.12);
+      padding-top:18px;
+      text-align:center;
+      font-size:9px;
+      color:#cfc3b7;
+    }
+
+    .overlay{
+      visibility:hidden;
+      opacity:0;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.32);
+      transition:.3s;
+      z-index:190;
+    }
+
     .overlay.open{visibility:visible;opacity:1}
-    .cart{position:fixed;top:0;right:-450px;width:min(450px,94vw);height:100vh;background:var(--blanco);z-index:200;padding:34px;transition:.35s;overflow-y:auto}
+
+    .cart{
+      position:fixed;
+      top:0;
+      right:-460px;
+      width:min(460px,94vw);
+      height:100vh;
+      background:var(--blanco);
+      z-index:200;
+      padding:34px;
+      transition:.35s;
+      overflow-y:auto;
+    }
+
     .cart.open{right:0}
-    .cart-header{display:flex;justify-content:space-between;border-bottom:1px solid var(--linea);padding-bottom:20px}
-    .cart-header h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400}
+
+    .cart-header{
+      display:flex;
+      justify-content:space-between;
+      border-bottom:1px solid var(--linea);
+      padding-bottom:20px;
+    }
+
+    .cart-header h2{
+      font-family:'Cormorant Garamond',serif;
+      font-size:32px;
+      font-weight:400;
+    }
+
     .close{cursor:pointer;font-size:27px}
     #cartItems{padding:14px 0}
-    .cart-empty{font-size:12px;color:var(--cafe);padding:28px 0}
-    .cart-item{padding:17px 0;border-bottom:1px solid var(--linea);font-size:11px}
-    .cart-item-top{display:flex;justify-content:space-between;gap:14px}
-    .cart-item-name{font-family:'Cormorant Garamond',serif;font-size:18px}
-    .cart-item-meta{font-size:9px;letter-spacing:.5px;margin-top:5px;color:var(--cafe)}
-    .cart-item-actions{margin-top:10px;display:flex;align-items:center;gap:8px}
-    .qty-btn{width:26px;height:26px;border:1px solid var(--linea);background:#fff;cursor:pointer}
-    .remove-btn{margin-left:auto;border:0;background:none;text-decoration:underline;font-size:9px;color:var(--cafe);cursor:pointer}
-    .cart-total{display:flex;justify-content:space-between;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:25px}
-    .checkout{width:100%;background:var(--cafe-oscuro);color:#fff;border:0;padding:17px;margin-top:22px;text-transform:uppercase;letter-spacing:2px;cursor:pointer}
-    .stock-note{font-size:9px;line-height:1.6;color:var(--cafe);margin-top:14px}
-    @media(max-width:900px){
+
+    .cart-empty{
+      font-size:12px;
+      color:var(--cafe);
+      padding:28px 0;
+    }
+
+    .cart-item{
+      padding:17px 0;
+      border-bottom:1px solid var(--linea);
+      font-size:11px;
+    }
+
+    .cart-item-top{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .cart-item-name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:18px;
+    }
+
+    .cart-item-meta{
+      font-size:9px;
+      margin-top:5px;
+      color:var(--cafe);
+    }
+
+    .cart-item-actions{
+      margin-top:10px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .qty-btn{
+      width:26px;height:26px;
+      border:1px solid var(--linea);
+      background:#fff;
+      cursor:pointer;
+    }
+
+    .remove-btn{
+      margin-left:auto;
+      border:0;
+      background:none;
+      text-decoration:underline;
+      font-size:9px;
+      color:var(--cafe);
+      cursor:pointer;
+    }
+
+    .cart-total{
+      display:flex;
+      justify-content:space-between;
+      font-family:'Cormorant Garamond',serif;
+      font-size:24px;
+      margin-top:25px;
+    }
+
+    .checkout{
+      width:100%;
+      background:var(--cafe-oscuro);
+      color:#fff;
+      border:0;
+      padding:17px;
+      margin-top:22px;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      cursor:pointer;
+    }
+
+    .stock-note{
+      font-size:9px;
+      line-height:1.6;
+      color:var(--cafe);
+      margin-top:14px;
+    }
+
+    .checkout-form{
+      display:none;
+      margin-top:22px;
+      padding-top:22px;
+      border-top:1px solid var(--linea);
+    }
+
+    .checkout-form.open{display:block}
+
+    .checkout-form h3{
+      font-family:'Cormorant Garamond',serif;
+      font-size:27px;
+      font-weight:400;
+      margin-bottom:15px;
+    }
+
+    .checkout-field{margin-bottom:10px}
+
+    .checkout-field label{
+      display:block;
+      font-size:8px;
+      text-transform:uppercase;
+      letter-spacing:1.2px;
+      color:var(--cafe);
+      margin-bottom:5px;
+    }
+
+    .checkout-field input,
+    .checkout-field select{
+      width:100%;
+      padding:11px 12px;
+      border:1px solid var(--linea);
+      background:#fff;
+      color:var(--cafe-oscuro);
+      font-family:'Montserrat',sans-serif;
+      font-size:11px;
+    }
+
+    .shipping-summary{
+      margin-top:16px;
+      padding:14px;
+      background:var(--marfil);
+      border:1px solid var(--linea);
+      font-size:11px;
+      line-height:1.9;
+    }
+
+    .shipping-summary-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .shipping-summary-row.total{
+      margin-top:7px;
+      padding-top:9px;
+      border-top:1px solid var(--linea);
+      font-family:'Cormorant Garamond',serif;
+      font-size:21px;
+    }
+
+    .checkout-back{
+      width:100%;
+      border:1px solid var(--linea);
+      background:#fff;
+      color:var(--cafe-oscuro);
+      padding:12px;
+      margin-top:9px;
+      cursor:pointer;
+      font-size:9px;
+      text-transform:uppercase;
+      letter-spacing:1.3px;
+    }
+
+    @media(max-width:980px){
+      header{
+        grid-template-columns:1fr auto 1fr;
+        grid-template-rows:auto auto;
+        grid-template-areas:
+          ". brand ."
+          "navleft navleft navright";
+        gap:12px;
+        padding:14px 4%;
+      }
+
+      .brand{grid-area:brand;justify-self:center;text-align:center;min-width:0}
+      .nav-left{
+        grid-area:navleft;
+        width:100%;
+        justify-content:center;
+        flex-wrap:wrap;
+        gap:18px 26px;
+        border-top:1px solid var(--linea);
+        padding-top:11px;
+      }
+      .nav-right{grid-area:navright;border-top:1px solid var(--linea);padding-top:11px}
+      .nav-right .contact-nav{display:none}
+      .nav-link{font-size:16px}
+      .category-grid{grid-template-columns:repeat(3,1fr)}
       .products{grid-template-columns:repeat(2,1fr)}
-      .story-grid{grid-template-columns:1fr;gap:30px}
+      .contact-grid{grid-template-columns:1fr}
       .footer-grid{grid-template-columns:1fr 1fr}
     }
-    @media(max-width:750px){
-      header{height:78px;padding:0 20px}
-      header{
-        height:auto;
-        min-height:78px;
-        padding:14px 18px 12px;
-        display:grid;
-        grid-template-columns:1fr auto;
-        grid-template-areas:
-          "brand icons"
-          "menu menu";
-        row-gap:10px;
-      }
-      .brand{
-        position:static;
-        transform:none;
-        grid-area:brand;
-        text-align:left;
-      }
-      .icons{grid-area:icons;justify-self:end}
-      .menu{
-        grid-area:menu;
-        display:flex;
-        width:100%;
-        gap:0;
-        justify-content:space-between;
-        border-top:1px solid var(--linea);
-        padding-top:10px;
-      }
-      .menu a{
-        font-size:9px;
-        letter-spacing:1.1px;
-        white-space:nowrap;
-      }
-      .brand-name{font-size:28px;letter-spacing:6px}
+
+    @media(max-width:650px){
+      .announcement{font-size:8px}
+      .brand-name{font-size:31px;letter-spacing:6px}
+      .brand-symbol{font-size:26px}
       .brand-subtitle{font-size:6px;letter-spacing:2px}
-      .hero{min-height:68vh;background-position:58% center}
-      .catalog{padding:70px 16px 90px}
-      .products{gap:34px 12px}
+      .nav-left{gap:12px 18px}
+      .nav-link{font-size:14px}
+      .hero{
+        min-height:60vh;
+        padding:55px 22px;
+        background:
+          linear-gradient(90deg,rgba(255,253,249,.92) 0%,rgba(255,253,249,.72) 48%,rgba(255,253,249,.12) 100%),
+          url('images/hero.jpeg') 58% center/cover no-repeat;
+      }
+      .hero-content{max-width:330px}
+      .hero h1{font-size:53px}
+      .hero p{font-size:22px}
+      .hero-mark::before,.hero-mark::after{width:55px}
+      .category-grid{grid-template-columns:repeat(2,1fr)}
+      .category-card div{font-size:18px}
+      .catalog{padding:72px 15px 90px}
+      .products{gap:35px 12px}
       .product h3{font-size:21px}
-      .footer-grid{grid-template-columns:1fr;gap:30px}
-      .story{padding:80px 22px}
+      .footer-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
+
 <body>
+
 <div class="announcement">Joyas con significado · Envíos a todo Chile</div>
 
 <header>
-  <nav class="menu">
-    <a href="#inicio">Tienda</a>
-    <a href="#catalogo">Catálogo</a>
-    <a href="#historia">Nuestra historia</a>
+  <nav class="nav-left">
+    <a class="nav-link" href="#inicio">Tienda</a>
+    <a class="nav-link" href="#catalogo">Catálogo</a>
+    <a class="nav-link" href="#historia">Nuestra historia</a>
   </nav>
 
-  <div class="brand" aria-label="Tabor, joyas con significado">
+  <div class="brand">
+    <div class="brand-symbol">†</div>
     <div class="brand-name">TABOR</div>
     <div class="brand-subtitle">Joyas con significado</div>
   </div>
 
-  <div class="icons">
-    <button class="icon-btn" aria-label="Favoritos">
-      <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+  <div class="nav-right">
+    <a class="nav-link contact-nav" href="#contacto">Contáctanos</a>
+    <button class="icon-btn" aria-label="Buscar">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
     </button>
-    <button class="icon-btn cart-button" onclick="toggleCart()" aria-label="Abrir carrito">
+    <button class="icon-btn" onclick="toggleCart()" aria-label="Abrir carrito">
       <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 13H7L6 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
       <span id="cartCount">0</span>
     </button>
@@ -171,41 +810,82 @@
 
 <section class="hero" id="inicio">
   <div class="hero-content">
-    <div class="hero-small">Casa Tabor</div>
-    <h1>Herencia.<br>Belleza. Fe.</h1>
-    <p>Joyas creadas para llevar contigo aquello en lo que crees.</p>
-    <a href="#catalogo" class="button">Descubrir colección</a>
+    <h1>Joyas<br>con propósito</h1>
+    <div class="hero-mark"><span>†</span></div>
+    <p>Piezas que expresan tu fe y te acompañan siempre.</p>
+    <a href="#catalogo" class="button">Ver catálogo</a>
   </div>
 </section>
 
-<section class="intro">
-  <div class="eyebrow">Nuestra esencia</div>
-  <h2>Joyas que cuentan una historia</h2>
-  <p>Casa Tabor reúne piezas con carácter, inspiración vintage y símbolos que nos recuerdan lo esencial. Joyas y accesorios pensados para acompañarte, regalarse y convertirse en pequeños tesoros con significado.</p>
+<section class="collection-teaser">
+  <div class="section-heading">
+    <h2>Nuestra colección</h2>
+    <div class="mini-mark">— † —</div>
+  </div>
+
+  <div class="category-grid">
+    <a class="category-card" href="#catalogo" onclick="setCategory('Anillos')">
+      <img src="images/anillo-san-benito-dorado.jpeg" alt="Anillos Casa Tabor">
+      <div>Anillos</div>
+    </a>
+
+    <a class="category-card" href="#catalogo" onclick="setCategory('Aros')">
+      <img src="images/aros-reina-victoria.jpeg" alt="Aros Casa Tabor">
+      <div>Aros</div>
+    </a>
+
+    <a class="category-card" href="#catalogo" onclick="setCategory('Collares')">
+      <img src="images/collar-san-benito.jpeg" alt="Collares Casa Tabor">
+      <div>Collares</div>
+    </a>
+
+    <a class="category-card" href="#catalogo" onclick="setCategory('Pulseras')">
+      <img src="images/pulsera-san-benito.jpeg" alt="Pulseras Casa Tabor">
+      <div>Pulseras</div>
+    </a>
+
+    <a class="category-card" href="#catalogo" onclick="setCategory('Accesorios')">
+      <img src="images/pinza-eliza.jpeg" alt="Accesorios Casa Tabor">
+      <div>Accesorios</div>
+    </a>
+  </div>
 </section>
 
 <section class="catalog" id="catalogo">
-  <div class="section-title">
-    <div class="eyebrow">Casa Tabor</div>
-    <h2>Catálogo</h2>
-  </div>
+  <div class="eyebrow">Casa Tabor</div>
+  <h2>Catálogo</h2>
   <div class="filters" id="filters"></div>
   <div class="products" id="products"></div>
 </section>
 
 <section class="story" id="historia">
-  <div class="story-grid">
-    <div>
-      <div class="eyebrow">Nuestra historia</div>
-      <h2>Más que una joya.</h2>
-      <div class="story-quote">“Belleza que se lleva. Símbolos que permanecen.”</div>
+  <div class="story-inner">
+    <div class="eyebrow">Nuestra historia</div>
+    <h2>Más que una joya.</h2>
+    <p>Casa Tabor nace del deseo de encontrar piezas que no sean solamente bonitas, sino que también tengan algo que decir. Nos inspira la joyería con aire antiguo, los símbolos de fe, los corazones, medallas y detalles capaces de transformar un look y, al mismo tiempo, guardar un significado personal.</p>
+    <p>Seleccionamos cada pieza en pequeñas cantidades, privilegiando diseños con identidad. Por eso muchas de nuestras joyas tienen stock limitado: queremos que se sientan especiales, como ese hallazgo que encuentras una vez y decides guardar contigo.</p>
+  </div>
+</section>
+
+<section class="contact" id="contacto">
+  <div class="eyebrow">Casa Tabor</div>
+  <h2>Contáctanos</h2>
+
+  <div class="contact-grid">
+    <div class="contact-card">
+      <div class="label">Ubicación</div>
+      <div class="value">Las Condes, Chile</div>
     </div>
-    <div class="story-copy">
-      <p>Casa Tabor nace del deseo de encontrar piezas que no sean solamente bonitas, sino que también tengan algo que decir. Nos inspira la joyería con aire antiguo, los símbolos de fe, los corazones, medallas y detalles capaces de transformar un look y, al mismo tiempo, guardar un significado personal.</p>
-      <p>Seleccionamos cada pieza en pequeñas cantidades, privilegiando diseños con identidad. Por eso muchas de nuestras joyas tienen stock limitado: queremos que se sientan especiales, como ese hallazgo que encuentras una vez y decides guardar contigo.</p>
-      <p>El nombre Tabor evoca un lugar de luz y transformación. Esa idea está en el corazón de la marca: objetos cotidianos que pueden convertirse en recordatorios de aquello que amamos, creemos o queremos mantener cerca.</p>
-      <p class="story-note">Desde Las Condes, Chile · Selección en pequeñas cantidades · Envíos a todo Chile.</p>
-    </div>
+
+    <a class="contact-card" href="tel:+56962261085">
+      <div class="label">WhatsApp / Teléfono</div>
+      <div class="value">+56 9 6226 1085</div>
+    </a>
+
+    <a class="contact-card" href="https://www.instagram.com/casa.tabor/" target="_blank" rel="noopener">
+      <div class="label">Instagram</div>
+      <div class="value">@casa.tabor</div>
+    </a>
   </div>
 </section>
 
@@ -216,31 +896,110 @@
       <div class="footer-tag">Joyas con significado</div>
       <div class="footer-line">Las Condes, Chile</div>
     </div>
+
     <div>
       <div class="footer-title">Contacto</div>
       <div class="footer-line"><a href="tel:+56962261085">+56 9 6226 1085</a></div>
       <div class="footer-line"><a href="https://www.instagram.com/casa.tabor/" target="_blank" rel="noopener">@casa.tabor</a></div>
     </div>
+
     <div>
       <div class="footer-title">Información</div>
       <div class="footer-line">Envíos a todo Chile</div>
       <div class="footer-line">Stock limitado por diseño</div>
-      <div class="footer-line">Pago seguro próximamente con Mercado Pago</div>
+      <div class="footer-line">Pago seguro con Flow</div>
     </div>
   </div>
+
   <div class="footer-bottom">© 2026 Casa Tabor · Todos los derechos reservados.</div>
 </footer>
 
 <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+
 <aside class="cart" id="cart">
   <div class="cart-header">
     <h2>Tu carrito</h2>
     <span class="close" onclick="toggleCart()">×</span>
   </div>
+
   <div id="cartItems"></div>
-  <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
-  <button class="checkout" onclick="checkout()">Continuar al pago</button>
-  <p class="stock-note">El stock se controla dentro de esta visita. Cuando conectemos Mercado Pago y una base de datos, quedará sincronizado automáticamente entre todas las compras.</p>
+
+  <div class="cart-total">
+    <span>Total</span>
+    <span id="cartTotal">$0</span>
+  </div>
+
+  <button class="checkout" id="continueCheckoutBtn" onclick="checkout()">Continuar al pago</button>
+
+  <div class="checkout-form" id="checkoutForm">
+    <h3>Datos de despacho</h3>
+
+    <div class="checkout-field">
+      <label for="checkoutName">Nombre y apellido</label>
+      <input id="checkoutName" type="text" autocomplete="name" required>
+    </div>
+
+    <div class="checkout-field">
+      <label for="checkoutEmail">Email</label>
+      <input id="checkoutEmail" type="email" autocomplete="email" required>
+    </div>
+
+    <div class="checkout-field">
+      <label for="checkoutPhone">Teléfono</label>
+      <input id="checkoutPhone" type="tel" autocomplete="tel" placeholder="+56 9..." required>
+    </div>
+
+    <div class="checkout-field">
+      <label for="checkoutAddress">Dirección</label>
+      <input id="checkoutAddress" type="text" autocomplete="street-address" placeholder="Calle y número" required>
+    </div>
+
+    <div class="checkout-field">
+      <label for="checkoutDept">Depto / casa / oficina</label>
+      <input id="checkoutDept" type="text" placeholder="Opcional">
+    </div>
+
+    <div class="checkout-field">
+      <label for="checkoutCommune">Comuna</label>
+      <input id="checkoutCommune" type="text" required>
+    </div>
+
+    <div class="checkout-field">
+      <label for="checkoutRegion">Región</label>
+      <select id="checkoutRegion" onchange="updateShippingSummary()" required>
+        <option value="">Selecciona tu región</option>
+        <option value="Arica y Parinacota">Arica y Parinacota</option>
+        <option value="Tarapacá">Tarapacá</option>
+        <option value="Antofagasta">Antofagasta</option>
+        <option value="Atacama">Atacama</option>
+        <option value="Coquimbo">Coquimbo</option>
+        <option value="Valparaíso">Valparaíso</option>
+        <option value="Metropolitana">Región Metropolitana</option>
+        <option value="O'Higgins">O'Higgins</option>
+        <option value="Maule">Maule</option>
+        <option value="Ñuble">Ñuble</option>
+        <option value="Biobío">Biobío</option>
+        <option value="La Araucanía">La Araucanía</option>
+        <option value="Los Ríos">Los Ríos</option>
+        <option value="Los Lagos">Los Lagos</option>
+        <option value="Aysén">Aysén</option>
+        <option value="Magallanes">Magallanes</option>
+      </select>
+    </div>
+
+    <div class="shipping-summary">
+      <div class="shipping-summary-row"><span>Productos</span><span id="checkoutSubtotal">$0</span></div>
+      <div class="shipping-summary-row"><span>Despacho</span><span id="checkoutShipping">Selecciona región</span></div>
+      <div class="shipping-summary-row total"><span>Total</span><span id="checkoutFinalTotal">$0</span></div>
+    </div>
+
+    <button class="checkout" id="flowPayButton" onclick="pagarConFlow()">Pagar con Flow</button>
+    <button class="checkout-back" onclick="volverAlCarrito()">Volver al carrito</button>
+  </div>
+
+  <p class="stock-note">
+    Envíos a todo Chile. El costo de despacho se calcula antes de pagar.
+  </p>
 </aside>
 
 <script>
@@ -280,28 +1039,39 @@ function setCategory(category) {
 
 function renderProducts() {
   const list = activeCategory === 'Todos' ? products : products.filter(p=>p.category===activeCategory);
+
   document.getElementById('products').innerHTML = list.map(p => {
     const variantEntries = Object.entries(p.variants);
     const allSoldOut = variantEntries.every(([v,qty]) => availableQty(p,v) <= 0);
+
     const options = variantEntries.map(([variant, stock]) => {
       const available = availableQty(p, variant);
       return `<option value="${variant}" ${available<=0?'disabled':''}>${variant} · ${available>0 ? available+' disponible'+(available>1?'s':'') : 'agotado'}</option>`;
     }).join('');
+
     return `
       <article class="product">
         <div class="product-image">
           <img src="images/${p.id}.jpeg" alt="${p.name}" loading="lazy">
           <div class="stock-badge">${totalStock(p)} en stock</div>
         </div>
+
         <div class="category">${p.category}</div>
         <h3>${p.name}</h3>
         <div class="price">${money(p.price)}</div>
+
         ${p.material ? `<div style="font-size:10px;color:var(--cafe);margin:-4px 0 12px">${p.material}</div>` : ''}
+
         <div class="variant-row">
           <label for="variant-${p.id}">${variantEntries.length>1 ? 'Elige talla' : 'Opción'}</label>
-          <select class="variant-select" id="variant-${p.id}" ${allSoldOut?'disabled':''}>${options}</select>
+          <select class="variant-select" id="variant-${p.id}" ${allSoldOut?'disabled':''}>
+            ${options}
+          </select>
         </div>
-        <button class="add" onclick="addToCart('${p.id}')" ${allSoldOut?'disabled':''}>${allSoldOut?'Agotado':'Agregar al carrito'}</button>
+
+        <button class="add" onclick="addToCart('${p.id}')" ${allSoldOut?'disabled':''}>
+          ${allSoldOut?'Agotado':'Agregar al carrito'}
+        </button>
       </article>
     `;
   }).join('');
@@ -310,16 +1080,22 @@ function renderProducts() {
 function addToCart(productId) {
   const product = products.find(p=>p.id===productId);
   const select = document.getElementById(`variant-${productId}`);
+
   if (!product || !select || !select.value) return;
+
   const variant = select.value;
+
   if (availableQty(product, variant) <= 0) {
     alert('Esa opción ya no tiene stock disponible.');
     renderProducts();
     return;
   }
+
   const existing = cart.find(i => i.id===productId && i.variant===variant);
+
   if (existing) existing.quantity++;
   else cart.push({id:productId,name:product.name,price:product.price,variant,quantity:1});
+
   saveCart();
   renderProducts();
   openCart();
@@ -328,13 +1104,18 @@ function addToCart(productId) {
 function changeQty(index, delta) {
   const item = cart[index];
   const product = products.find(p=>p.id===item.id);
+
   if (!product) return;
+
   if (delta > 0 && item.quantity >= product.variants[item.variant]) {
     alert('No hay más unidades disponibles de esta opción.');
     return;
   }
+
   item.quantity += delta;
+
   if (item.quantity <= 0) cart.splice(index,1);
+
   saveCart();
   renderProducts();
 }
@@ -353,12 +1134,15 @@ function saveCart() {
 function renderCart() {
   const container = document.getElementById('cartItems');
   const count = cart.reduce((sum,item)=>sum+item.quantity,0);
+
   document.getElementById('cartCount').innerText = count;
+
   if (!cart.length) {
     container.innerHTML = '<div class="cart-empty">Tu carrito está vacío.</div>';
     document.getElementById('cartTotal').innerText = '$0';
     return;
   }
+
   container.innerHTML = cart.map((item,index)=>`
     <div class="cart-item">
       <div class="cart-item-top">
@@ -368,6 +1152,7 @@ function renderCart() {
         </div>
         <div>${money(item.price*item.quantity)}</div>
       </div>
+
       <div class="cart-item-actions">
         <button class="qty-btn" onclick="changeQty(${index},-1)">−</button>
         <span>${item.quantity}</span>
@@ -376,6 +1161,7 @@ function renderCart() {
       </div>
     </div>
   `).join('');
+
   const total = cart.reduce((sum,item)=>sum+item.price*item.quantity,0);
   document.getElementById('cartTotal').innerText = money(total);
 }
@@ -384,21 +1170,120 @@ function openCart() {
   document.getElementById('cart').classList.add('open');
   document.getElementById('overlay').classList.add('open');
 }
+
 function toggleCart() {
   document.getElementById('cart').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('open');
 }
+
+function cartSubtotal() {
+  return cart.reduce((sum,item)=>sum + item.price * item.quantity, 0);
+}
+
+function shippingCost(region) {
+  if (!region) return 0;
+  if (region === 'Metropolitana') return 3990;
+
+  const extreme = [
+    'Arica y Parinacota',
+    'Tarapacá',
+    'Antofagasta',
+    'Aysén',
+    'Magallanes'
+  ];
+
+  return extreme.includes(region) ? 5990 : 4990;
+}
+
 function checkout() {
   if (!cart.length) {
     alert('Tu carrito está vacío 🤍');
     return;
   }
-  alert('El catálogo y el carrito ya están listos. El siguiente paso será conectar Mercado Pago para procesar este pedido.');
+
+  document.getElementById('checkoutForm').classList.add('open');
+  document.getElementById('continueCheckoutBtn').style.display = 'none';
+  updateShippingSummary();
+}
+
+function volverAlCarrito() {
+  document.getElementById('checkoutForm').classList.remove('open');
+  document.getElementById('continueCheckoutBtn').style.display = 'block';
+}
+
+function updateShippingSummary() {
+  const subtotal = cartSubtotal();
+  const region = document.getElementById('checkoutRegion')?.value || '';
+  const shipping = shippingCost(region);
+
+  document.getElementById('checkoutSubtotal').innerText = money(subtotal);
+  document.getElementById('checkoutShipping').innerText = region ? money(shipping) : 'Selecciona región';
+  document.getElementById('checkoutFinalTotal').innerText = region ? money(subtotal + shipping) : money(subtotal);
+}
+
+async function pagarConFlow() {
+  if (!cart.length) {
+    alert('Tu carrito está vacío 🤍');
+    return;
+  }
+
+  const nombre = document.getElementById('checkoutName').value.trim();
+  const email = document.getElementById('checkoutEmail').value.trim();
+  const telefono = document.getElementById('checkoutPhone').value.trim();
+  const direccion = document.getElementById('checkoutAddress').value.trim();
+  const depto = document.getElementById('checkoutDept').value.trim();
+  const comuna = document.getElementById('checkoutCommune').value.trim();
+  const region = document.getElementById('checkoutRegion').value;
+
+  if (!nombre || !email || !telefono || !direccion || !comuna || !region) {
+    alert('Completa todos los datos de despacho antes de continuar 🤍');
+    return;
+  }
+
+  const subtotal = cartSubtotal();
+  const despacho = shippingCost(region);
+  const total = subtotal + despacho;
+
+  localStorage.setItem('casaTaborLastOrder', JSON.stringify({
+    nombre, email, telefono, direccion, depto, comuna, region,
+    carrito: cart, subtotal, despacho, total
+  }));
+
+  const button = document.getElementById('flowPayButton');
+  const textoOriginal = button.innerText;
+  button.disabled = true;
+  button.innerText = 'Conectando con Flow...';
+
+  try {
+    const response = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        amount: total,
+        email,
+        subject: 'Compra Casa Tabor'
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.paymentUrl) {
+      throw new Error(data?.error || 'No se pudo crear el pago');
+    }
+
+    window.location.href = data.paymentUrl;
+  } catch (error) {
+    console.error(error);
+    alert('No pudimos conectarnos con Flow. Intenta nuevamente 🤍');
+    button.disabled = false;
+    button.innerText = textoOriginal;
+  }
 }
 
 renderFilters();
 renderProducts();
 renderCart();
 </script>
+
 </body>
 </html>
