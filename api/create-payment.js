@@ -302,7 +302,7 @@ module.exports = async function handler(req, res) {
 
 
     const response = await fetch(
-      "https://sandbox.flow.cl/api/payment/create",
+      "https://www.flow.cl/api/payment/create",
       {
         method: "POST",
 
