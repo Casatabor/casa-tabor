@@ -43,7 +43,7 @@ module.exports = async function handler(req, res) {
     });
 
     const response = await fetch(
-      `https://sandbox.flow.cl/api/payment/getStatus?${query.toString()}`
+      `https://www.flow.cl/api/payment/getStatus?${query.toString()}`
     );
 
     const data = await response.json();
