@@ -1,76 +1,30 @@
 const crypto = require("node:crypto");
 const querystring = require("node:querystring");
 
+// Los PRECIOS siguen aquí para que el cliente no pueda alterarlos.
+// El STOCK ya NO se toma de aquí: se consulta en Supabase.
 const PRODUCTS = {
-  "pinza-eliza": { price: 8000, variants: { "Talla única": 2 } },
-  "aros-cruz-sagrado-corazon": { price: 8500, variants: { "Talla única": 1 } },
-  "pendientes-candados-corazon": { price: 6500, variants: { "Talla única": 1 } },
-  "aros-reina-victoria": { price: 10000, variants: { "Talla única": 1 } },
-  "cadena-sagrado-corazon-brillos": { price: 12000, variants: { "Talla única": 1 } },
-  "collar-acero-corazon-plata": { price: 12990, variants: { "Talla única": 1 } },
-  "panuelo-beige-sagrado-corazon": { price: 12500, variants: { "Talla única": 1 } },
-  "pulsera-san-benito": { price: 3500, variants: { Ajustable: 3 } },
-  "pulsera-proteccion-virgen-maria": { price: 5000, variants: { Ajustable: 3 } },
-
-  "anillo-vintage-burdel": {
-    price: 7500,
-    variants: { "7": 1, "8": 1 }
-  },
-
-  "anillo-san-benito-bicolor": {
-    price: 12000,
-    variants: { "7": 1, "8": 1 }
-  },
-
-  "anillo-mater": {
-    price: 5500,
-    variants: { "8": 1 }
-  },
-
-  "anillo-rombo-rojo": {
-    price: 7500,
-    variants: { "7": 1 }
-  },
-
-  "anillo-san-benito-dorado": {
-    price: 12000,
-    variants: { "9": 1 }
-  },
-
-  "conjunto-diamante": {
-    price: 6500,
-    variants: { "7": 1 }
-  },
-
-  "anillo-brillante-corazon": {
-    price: 7000,
-    variants: { "8": 1 }
-  },
-
-  "anillo-ovalado-sagrado-corazon": {
-    price: 4500,
-    variants: { Ajustable: 1 }
-  },
-
-  "anillo-exvoto": {
-    price: 7500,
-    variants: { "7": 1 }
-  },
-
-  "collar-san-benito": {
-    price: 15000,
-    variants: { "Talla única": 1 }
-  },
-
-  "anillo-quintillizo-corazon": {
-    price: 7500,
-    variants: { "7": 1 }
-  },
-
-  "anillo-corazon-ajustable": {
-    price: 5500,
-    variants: { "7 / ajustable": 1 }
-  },
+  "pinza-eliza": { price: 8000 },
+  "aros-cruz-sagrado-corazon": { price: 8500 },
+  "pendientes-candados-corazon": { price: 6500 },
+  "aros-reina-victoria": { price: 10000 },
+  "cadena-sagrado-corazon-brillos": { price: 12000 },
+  "collar-acero-corazon-plata": { price: 12990 },
+  "panuelo-beige-sagrado-corazon": { price: 12500 },
+  "pulsera-san-benito": { price: 3500 },
+  "pulsera-proteccion-virgen-maria": { price: 5000 },
+  "anillo-vintage-burdel": { price: 7500 },
+  "anillo-san-benito-bicolor": { price: 12000 },
+  "anillo-mater": { price: 5500 },
+  "anillo-rombo-rojo": { price: 7500 },
+  "anillo-san-benito-dorado": { price: 12000 },
+  "conjunto-diamante": { price: 6500 },
+  "anillo-brillante-corazon": { price: 7000 },
+  "anillo-ovalado-sagrado-corazon": { price: 4500 },
+  "anillo-exvoto": { price: 7500 },
+  "collar-san-benito": { price: 15000 },
+  "anillo-quintillizo-corazon": { price: 7500 },
+  "anillo-corazon-ajustable": { price: 5500 },
 };
 
 const VALID_REGIONS = new Set([
@@ -118,6 +72,32 @@ function clean(value, max = 180) {
     .slice(0, max);
 }
 
+async function getSupabaseStock() {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
+
+  if (!supabaseUrl || !supabaseSecretKey) {
+    throw new Error("Faltan credenciales de Supabase");
+  }
+
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/Stock%20Casa%20Tabor?select=product_id,variant,stock`,
+    {
+      headers: {
+        apikey: supabaseSecretKey,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Error consultando stock en Supabase:", errorText);
+    throw new Error("No fue posible consultar el stock");
+  }
+
+  return await response.json();
+}
+
 module.exports = async function handler(req, res) {
 
   if (req.method !== "POST") {
@@ -163,6 +143,7 @@ module.exports = async function handler(req, res) {
 
     const nombre = clean(customer.nombre, 120);
     const telefono = clean(customer.telefono, 40);
+
     const direccion = isPickup
       ? "Retiro en Las Condes"
       : clean(customer.direccion, 180);
@@ -200,6 +181,19 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    // ---------------------------------------------
+    // STOCK REAL DESDE SUPABASE
+    // ---------------------------------------------
+
+    const stockRows = await getSupabaseStock();
+
+    const stockMap = {};
+
+    for (const row of stockRows) {
+      const key = `${row.product_id}|||${row.variant}`;
+      stockMap[key] = Number(row.stock) || 0;
+    }
+
     let subtotal = 0;
 
     const normalizedItems = [];
@@ -214,6 +208,7 @@ module.exports = async function handler(req, res) {
 
       if (
         !product ||
+        !variant ||
         !Number.isInteger(quantity) ||
         quantity < 1
       ) {
@@ -222,20 +217,27 @@ module.exports = async function handler(req, res) {
         });
       }
 
-      const stock = product.variants[variant];
+      const stockKey = `${id}|||${variant}`;
+      const availableStock = stockMap[stockKey];
 
-      if (!stock || quantity > stock) {
+      if (
+        availableStock === undefined ||
+        quantity > availableStock
+      ) {
         return res.status(400).json({
-          error: "Cantidad o talla sin stock disponible"
+          error:
+            "Uno de los productos ya no tiene stock suficiente. Actualiza tu carrito e intenta nuevamente."
         });
       }
 
       subtotal += product.price * quantity;
 
+      // IMPORTANTE:
+      // Flow confirmation espera exactamente estas claves.
       normalizedItems.push({
         id,
-        v: variant,
-        q: quantity
+        variant,
+        quantity
       });
     }
 
@@ -259,7 +261,8 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    const commerceOrder = `TABOR-${Date.now()}`;
+    const commerceOrder =
+      `TABOR-${Date.now()}-${crypto.randomBytes(3).toString("hex")}`;
 
     const optional = JSON.stringify({
       n: nombre,
@@ -269,7 +272,12 @@ module.exports = async function handler(req, res) {
       c: comuna,
       r: finalRegion,
       s: despacho,
-      e: isPickup ? "Retiro en Las Condes" : "Envío a domicilio",
+      e: isPickup
+        ? "Retiro en Las Condes"
+        : "Envío a domicilio",
+
+      // Estos datos los recibirá flow-confirmation.js
+      // para descontar exactamente lo comprado.
       i: normalizedItems
     });
 
