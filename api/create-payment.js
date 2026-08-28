@@ -34,7 +34,7 @@ module.exports = async function handler(req, res) {
       urlConfirmation:
         "https://casatabor.vercel.app/api/flow-confirmation",
       urlReturn:
-        "https://casatabor.vercel.app/pago.html",
+  "https://casatabor.vercel.app/api/flow-return",
     };
 
     const keys = Object.keys(params).sort();
