@@ -393,6 +393,42 @@
       border-color:var(--cafe-oscuro);
     }
 
+    .product-page-back{
+      display:none;
+      width:max-content;
+      margin:0 auto 28px;
+      font-size:10px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      border-bottom:1px solid var(--dorado);
+      padding-bottom:4px;
+    }
+
+    body.product-page .hero,
+    body.product-page .collection-teaser,
+    body.product-page .story,
+    body.product-page .contact{
+      display:none;
+    }
+
+    body.product-page .catalog{
+      padding-top:65px;
+      min-height:70vh;
+    }
+
+    body.product-page .filters{
+      display:none;
+    }
+
+    body.product-page .product-page-back{
+      display:block;
+    }
+
+    body.product-page .products{
+      grid-template-columns:minmax(260px,420px);
+      justify-content:center;
+    }
+
     .products{
       display:grid;
       grid-template-columns:repeat(3,1fr);
@@ -995,7 +1031,8 @@
 
 <section class="catalog" id="catalogo">
   <div class="eyebrow">Casa Tabor</div>
-  <h2>Catálogo</h2>
+  <h2 id="catalogTitle">Catálogo</h2>
+  <a class="product-page-back" href="/#catalogo">← Volver al catálogo</a>
   <div class="filters" id="filters"></div>
   <div class="products" id="products"></div>
 </section>
@@ -1185,6 +1222,80 @@
 
 <script>
 const products = [{"id": "pinza-eliza", "name": "Pinza Eliza", "price": 8000, "category": "Accesorios", "material": "Gamuza con broderie", "variants": {"Talla única": 2}}, {"id": "aros-cruz-sagrado-corazon", "name": "Aros Cruz y Sagrado Corazón", "price": 8500, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "pendientes-candados-corazon", "name": "Pendientes Candados de Corazón", "price": 6500, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "aros-reina-victoria", "name": "Aros Reina Victoria", "price": 10000, "category": "Aros", "material": "", "variants": {"Talla única": 1}}, {"id": "cadena-sagrado-corazon-brillos", "name": "Cadena Sagrado Corazón y Brillos", "price": 12000, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "collar-acero-corazon-plata", "name": "Collar de Acero con Corazón de Plata", "price": 12990, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "panuelo-beige-sagrado-corazon", "name": "Pañuelo Beige con Sagrado Corazón", "price": 12500, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "pulsera-san-benito", "name": "Pulsera San Benito", "price": 3500, "category": "Pulseras", "material": "", "variants": {"Ajustable": 3}}, {"id": "pulsera-proteccion-virgen-maria", "name": "Pulsera de Protección Virgen María", "price": 5000, "category": "Pulseras", "material": "", "variants": {"Ajustable": 3}}, {"id": "anillo-vintage-burdel", "name": "Anillo Vintage Burdel", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1, "8": 1}}, {"id": "anillo-san-benito-bicolor", "name": "Anillo San Benito Bicolor", "price": 12000, "category": "Anillos", "material": "", "variants": {"7": 1, "8": 1}}, {"id": "anillo-mater", "name": "Anillo Mater", "price": 5500, "category": "Anillos", "material": "", "variants": {"8": 1}}, {"id": "anillo-rombo-rojo", "name": "Anillo Rombo Rojo", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-san-benito-dorado", "name": "Anillo San Benito Dorado", "price": 12000, "category": "Anillos", "material": "", "variants": {"9": 1}}, {"id": "conjunto-diamante", "name": "Conjunto Diamante", "price": 6500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-brillante-corazon", "name": "Anillo Brillante de Corazón", "price": 7000, "category": "Anillos", "material": "", "variants": {"8": 1}}, {"id": "anillo-ovalado-sagrado-corazon", "name": "Anillo Ovalado con Sagrado Corazón", "price": 4500, "category": "Anillos", "material": "", "variants": {"Ajustable": 1}}, {"id": "anillo-exvoto", "name": "Anillo Exvoto", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "collar-san-benito", "name": "Collar de San Benito", "price": 15000, "category": "Collares", "material": "", "variants": {"Talla única": 1}}, {"id": "anillo-quintillizo-corazon", "name": "Anillo Quintillizo de Corazón", "price": 7500, "category": "Anillos", "material": "", "variants": {"7": 1}}, {"id": "anillo-corazon-ajustable", "name": "Anillo de Corazón Ajustable", "price": 5500, "category": "Anillos", "material": "", "variants": {"7 / ajustable": 1}}];
+
+const productParams = new URLSearchParams(window.location.search);
+const selectedProductId = productParams.get('producto');
+const selectedProduct = selectedProductId ? products.find(p => p.id === selectedProductId) : null;
+
+function productUrl(productId) {
+  return `${window.location.origin}/?producto=${encodeURIComponent(productId)}`;
+}
+
+function applyProductLandingPage() {
+  if (!selectedProduct) return;
+
+  document.body.classList.add('product-page');
+
+  const title = `${selectedProduct.name} | Casa Tabor`;
+  const description = `${selectedProduct.name}, ${selectedProduct.category.toLowerCase()} de Casa Tabor. Compra online en Chile con envío a todo Chile o retiro en Las Condes.`;
+  const url = productUrl(selectedProduct.id);
+  const image = `${window.location.origin}/images/${selectedProduct.id}.jpeg`;
+
+  document.title = title;
+
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) metaDescription.setAttribute('content', description);
+
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) canonical.setAttribute('href', url);
+
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  const ogDescription = document.querySelector('meta[property="og:description"]');
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  const ogImage = document.querySelector('meta[property="og:image"]');
+  if (ogTitle) ogTitle.setAttribute('content', title);
+  if (ogDescription) ogDescription.setAttribute('content', description);
+  if (ogUrl) ogUrl.setAttribute('content', url);
+  if (ogImage) ogImage.setAttribute('content', image);
+
+  const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+  const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+  const twitterImage = document.querySelector('meta[name="twitter:image"]');
+  if (twitterTitle) twitterTitle.setAttribute('content', title);
+  if (twitterDescription) twitterDescription.setAttribute('content', description);
+  if (twitterImage) twitterImage.setAttribute('content', image);
+
+  const catalogTitle = document.getElementById('catalogTitle');
+  if (catalogTitle) catalogTitle.textContent = selectedProduct.name;
+
+  const schema = document.createElement('script');
+  schema.type = 'application/ld+json';
+  schema.id = 'productSchema';
+  schema.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": selectedProduct.name,
+    "image": [image],
+    "description": description,
+    "sku": selectedProduct.id,
+    "category": selectedProduct.category,
+    "brand": {
+      "@type": "Brand",
+      "name": "Casa Tabor"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": url,
+      "priceCurrency": "CLP",
+      "price": selectedProduct.price,
+      "itemCondition": "https://schema.org/NewCondition",
+      "availability": Object.values(selectedProduct.variants).some(q => Number(q) > 0)
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock"
+    }
+  });
+  document.head.appendChild(schema);
+}
 let cart = JSON.parse(localStorage.getItem('casaTaborCart') || '[]');
 let activeCategory = 'Todos';
 let stockLoaded = false;
@@ -1217,6 +1328,18 @@ async function loadLiveStock() {
 
     stockLoaded = true;
     reconcileCartWithStock();
+
+    if (selectedProduct) {
+      const schema = document.getElementById('productSchema');
+      if (schema) {
+        const data = JSON.parse(schema.textContent);
+        data.offers.availability = Object.values(selectedProduct.variants).some(q => Number(q) > 0)
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock";
+        schema.textContent = JSON.stringify(data);
+      }
+    }
+
     renderProducts();
     renderCart();
   } catch (error) {
@@ -1280,7 +1403,9 @@ function setCategory(category) {
 }
 
 function renderProducts() {
-  const list = activeCategory === 'Todos' ? products : products.filter(p=>p.category===activeCategory);
+  const list = selectedProduct
+    ? [selectedProduct]
+    : (activeCategory === 'Todos' ? products : products.filter(p=>p.category===activeCategory));
 
   document.getElementById('products').innerHTML = list.map(p => {
     const variantEntries = Object.entries(p.variants);
@@ -1294,12 +1419,14 @@ function renderProducts() {
     return `
       <article class="product">
         <div class="product-image">
-          <img src="images/${p.id}.jpeg" alt="${p.name} | Casa Tabor, joyas y accesorios en Chile" loading="lazy" decoding="async">
+          <a href="/?producto=${encodeURIComponent(p.id)}" aria-label="Ver ${p.name}">
+            <img src="images/${p.id}.jpeg" alt="${p.name} | Casa Tabor, joyas y accesorios en Chile" loading="lazy" decoding="async">
+          </a>
           <div class="stock-badge">${stockLoaded ? (totalStock(p)>0 ? totalStock(p)+' en stock' : 'Agotado') : 'Consultando stock...'}</div>
         </div>
 
         <div class="category">${p.category}</div>
-        <h3>${p.name}</h3>
+        <h3><a href="/?producto=${encodeURIComponent(p.id)}">${p.name}</a></h3>
         <div class="price">${money(p.price)}</div>
 
         ${p.material ? `<div style="font-size:10px;color:var(--cafe);margin:-4px 0 12px">${p.material}</div>` : ''}
@@ -1618,6 +1745,7 @@ function handlePaymentReturn() {
 }
 
 handlePaymentReturn();
+applyProductLandingPage();
 
 renderFilters();
 renderProducts();
