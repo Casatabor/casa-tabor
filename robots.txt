@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://casatabor.vercel.app/sitemap.xml
