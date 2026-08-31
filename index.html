@@ -9,14 +9,17 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-G7255XHMQ0');
-  <script type="application/ld+json">
+  </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Casa Tabor | Joyas, accesorios y tendencias en Chile</title>
-  <meta name="description" content="Casa Tabor: joyas y accesorios para mujer en Chile. Descubre anillos, aros, collares, pulseras y accesorios de tendencia, joyas vintage, San Benito, Sagrado Corazón, Virgen María y piezas con significado. Envíos a todo Chile.">
+  <meta name="description" content="Casa Tabor: tienda online de joyas y accesorios en Chile. Descubre anillos, aros, collares, pulseras, accesorios de tendencia, joyas religiosas, San Benito, Sagrado Corazón, Virgen María y piezas con significado. Envíos a todo Chile.">
+
   <link rel="canonical" href="https://casatabor.vercel.app/">
   <meta name="robots" content="index, follow">
 
+  <meta property="og:locale" content="es_CL">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Casa Tabor | Joyas y accesorios en Chile">
   <meta property="og:description" content="Joyas, accesorios y tendencias con identidad. Anillos, aros, collares, pulseras, joyas religiosas y piezas con significado. Envíos a todo Chile.">
@@ -1243,7 +1246,7 @@ function renderProducts() {
     return `
       <article class="product">
         <div class="product-image">
-          <img src="images/${p.id}.jpeg" alt="${p.name}" loading="lazy">
+          <img src="images/${p.id}.jpeg" alt="${p.name} | Casa Tabor, joyas y accesorios en Chile" loading="lazy" decoding="async">
           <div class="stock-badge">${stockLoaded ? (totalStock(p)>0 ? totalStock(p)+' en stock' : 'Agotado') : 'Consultando stock...'}</div>
         </div>
 
