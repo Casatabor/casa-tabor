@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>Gracias por tu compra | Casa Tabor</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #fffdf9;
+      color: #40372f;
+      font-family: Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 25px;
+      box-sizing: border-box;
+    }
+
+    .card {
+      max-width: 550px;
+      width: 100%;
+      border: 1px solid #e7ddd0;
+      padding: 50px 30px;
+      background: #fbf8f2;
+    }
+
+    .symbol {
+      color: #b6925d;
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-weight: normal;
+      font-size: 42px;
+      margin: 0 0 15px;
+    }
+
+    p {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #65584d;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 14px 24px;
+      border: 1px solid #65584d;
+      color: #40372f;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="card">
+    <div class="symbol">— † —</div>
+    <h1>¡Gracias por tu compra!</h1>
+    <p>
+      Tu pago fue recibido correctamente.<br>
+      Pronto prepararemos tu pedido Casa Tabor.
+    </p>
+
+    <a href="/">Volver a la tienda</a>
+  </main>
+
+  <script>
+    const order = JSON.parse(
+      localStorage.getItem('casaTaborLastOrder') || '{}'
+    );
+
+    localStorage.removeItem('casaTaborCart');
+
+    function estimatedDeliveryDate() {
+      const date = new Date();
+
+      if (order.deliveryMethod === 'pickup') {
+        date.setDate(date.getDate() + 2);
+      } else {
+        date.setDate(date.getDate() + 7);
+      }
+
+      return date.toISOString().split('T')[0];
+    }
+
+    window.googleReviewOrder = {
+      orderId: order.commerceOrder || order.flowOrder || '',
+      email: order.email || '',
+      country: 'CL',
+      deliveryDate: estimatedDeliveryDate()
+    };
+  </script>
+
+  <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
+
+  <script>
+    window.renderOptIn = function() {
+
+      const order = window.googleReviewOrder;
+
+      if (!order || !order.orderId || !order.email) {
+        console.warn('No hay datos suficientes para Google Customer Reviews');
+        return;
+      }
+
+      window.gapi.load('surveyoptin', function() {
+        window.gapi.surveyoptin.render({
+          "merchant_id": 5847560696,
+          "order_id": order.orderId,
+          "email": order.email,
+          "delivery_country": order.country,
+          "estimated_delivery_date": order.deliveryDate,
+          "opt_in_style": "CENTER_DIALOG"
+        });
+      });
+    };
+  </script>
+
+</body>
+</html>
