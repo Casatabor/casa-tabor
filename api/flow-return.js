@@ -54,8 +54,8 @@ module.exports = async function handler(req, res) {
     }
 
     if (data.status === 2) {
-      return res.redirect(302, "/?pago=exito");
-    }
+  return res.redirect(302, "/gracias.html");
+}
 
     if (data.status === 3 || data.status === 4) {
       return res.redirect(302, "/?pago=rechazado");
